@@ -4,17 +4,18 @@ import {getNode, detachNode, nodeIndex} from 'widjet-utils'
 
 import DEFAULT_VALIDATORS from './validators'
 import DEFAULT_RESOLVERS from './resolvers'
-import {when, compose} from './utils'
+import {when, curry2, compose} from './utils'
 
 // const log = (v) => { console.log(v); return v }
 
 widgets.define('live-validation', (input, options = {}) => {
   const validators = (options.validators || []).concat(DEFAULT_VALIDATORS)
   const resolvers = (options.resolvers || []).concat(DEFAULT_RESOLVERS)
+  const i18n = options.i18n || (k => k)
   const fieldValue = when(resolvers)
 
-  const validator = when(validators.map(([predicate, v]) => {
-    return [predicate, compose(v, fieldValue)]
+  const validator = when(validators.map(([predicate, validate]) => {
+    return [predicate, compose(curry2(validate)(i18n), fieldValue)]
   }))
 
   const subscription = new DisposableEvent(input, 'change blur', () => {

@@ -93,5 +93,19 @@ describe('live-validation', () => {
         expect(document.querySelector('.error')).not.to.be(null)
       })
     })
+
+    describe('with a locale function provided', () => {
+      beforeEach(() => {
+        widgets('live-validation', '[required]', {
+          on: 'init',
+          validateOnInit: true,
+          i18n: k => k.toUpperCase()
+        })
+      })
+      it('validates all the fields at init', () => {
+        const error = document.querySelector('.error')
+        expect(error.textContent).to.eql('BLANK_VALUE')
+      })
+    })
   })
 })
