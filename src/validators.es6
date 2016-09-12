@@ -15,7 +15,8 @@ export function validateEmail (t, i18n = defaultI18n) {
     : i18n('invalid email')
 }
 
-export default {
-  email: validateEmail,
-  checkbox: validateChecked
-}
+export default [
+  [i => i.nodeName === 'INPUT' && i.type === 'email', validateEmail],
+  [i => i.nodeName === 'INPUT' && i.type === 'checkbox', validateChecked],
+  [i => true, validatePresence]
+]

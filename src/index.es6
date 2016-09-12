@@ -1,42 +1,38 @@
 import widgets from 'widjet'
 import {DisposableEvent} from 'widjet-disposables'
-import {merge, getNode, detachNode, nodeIndex} from 'widjet-utils'
+import {getNode, detachNode, nodeIndex} from 'widjet-utils'
 
-import DEFAULT_VALIDATORS, {validatePresence} from './validators'
-import DEFAULT_RESOLVERS, {fieldValue} from './resolvers'
+import DEFAULT_VALIDATORS from './validators'
+import DEFAULT_RESOLVERS from './resolvers'
+import {when, compose} from './utils'
+
+// const log = (v) => { console.log(v); return v }
 
 widgets.define('live-validation', (input, options = {}) => {
-  const validators = merge(DEFAULT_VALIDATORS, options.validators || {})
+  const validators = (options.validators || []).concat(DEFAULT_VALIDATORS)
   const resolvers = (options.resolvers || []).concat(DEFAULT_RESOLVERS)
-  const context = {validators, resolvers}
+  const fieldValue = when(resolvers)
+
+  const validator = when(validators.map(([predicate, v]) => {
+    return [predicate, compose(v, fieldValue)]
+  }))
 
   const subscription = new DisposableEvent(input, 'change blur', () => {
-    validate(input, context)
+    validate(validator, input)
   })
 
-  if (options.validateOnInit) { validate(input, context) }
+  if (options.validateOnInit) { validate(validator, input) }
 
   return subscription
 })
 
-function validate (input, {validators, resolvers}) {
+function validate (validator, input) {
   const field = input.parentNode
-  const type = input.type || input.nodeName.toLocaleLowerCase()
   const index = nodeIndex(input)
-  const value = fieldValue(input, resolvers)
-  let res
 
   removeFieldFeedback(field)
 
-  if (type != null) {
-    const validator = validators[type] != null
-      ? validators[type]
-      : validatePresence
-
-    res = validator(value)
-  } else {
-    res = validatePresence(value)
-  }
+  const res = validator(input)
 
   if (res != null) {
     addFieldErrorFeedback(field, index, res)
