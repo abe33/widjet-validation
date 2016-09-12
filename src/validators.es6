@@ -2,7 +2,7 @@
 const defaultI18n = s => s
 
 export function validatePresence (t, i18n = defaultI18n) {
-  return (t != null) && t !== '' ? null : i18n('blank value')
+  return (t != null) && t.length !== 0 ? null : i18n('blank value')
 }
 
 export function validateChecked (t, i18n = defaultI18n) {

@@ -15,122 +15,69 @@ describe('live-validation', () => {
       document.body.innerHTML = `
         <form>
           <input type='text' name='name' required>
+
           <input type='checkbox' name='tos' required>
+
+          <input type='radio' name='radio' value='1' required>
+          <input type='radio' name='radio' value='2' required>
+          <input type='radio' name='radio' value='3' required>
+
           <textarea name='message' required></textarea>
-          <select name='choice' required>
+
+          <select name='single' required>
             <option></option>
             <option value='value'>Value</option>
+          </select>
+
+          <select name='multi' required multiple>
+            <option></option>
+            <option value='value1'>Value 1</option>
+            <option value='value2'>Value 2</option>
+            <option value='value3'>Value 3</option>
+            <option value='value4'>Value 4</option>
           </select>
         </form>
       `
     })
 
+    const inputs = [
+      ['input[type="text"]', input => input.value = 'foo'],
+      ['input[type="checkbox"]', input => input.checked = true],
+      ['input[type="radio"]', input => input.checked = true],
+      ['select:not([multiple])', input => input.selectedIndex = 1],
+      ['select[multiple]', input => input.selectedIndex = 1],
+      ['textarea', input => input.value = 'foo']
+    ]
+
     describe('with no config at all', () => {
       beforeEach(() => {
         widgets('live-validation', '[required]', {on: 'init'})
       })
+      inputs.forEach(([selector, changeValue]) => {
+        describe(`on ${selector}`, () => {
+          beforeEach(() => {
+            input = document.querySelector(selector)
+          })
 
-      describe('on a text input', () => {
-        beforeEach(() => {
-          input = document.querySelector('input[type="text"]')
-        })
+          it('adds an error message after the node when not validated', () => {
+            widgets.dispatch(input, 'change')
 
-        it('adds an error message after the node when not validated', () => {
-          widgets.dispatch(input, 'change')
+            error = document.querySelector('.error')
 
-          error = document.querySelector('.error')
+            expect(error).not.to.be(null)
+            expect(nodeIndex(error)).to.eql(nodeIndex(input) + 1)
+          })
 
-          expect(error).not.to.be(null)
-          expect(nodeIndex(error)).to.eql(nodeIndex(input) + 1)
-        })
+          it('removes the error once it validates', () => {
+            widgets.dispatch(input, 'change')
 
-        it('removes the error once it validates', () => {
-          widgets.dispatch(input, 'change')
+            changeValue(input)
+            widgets.dispatch(input, 'change')
 
-          input.value = 'foo'
-          widgets.dispatch(input, 'change')
+            error = document.querySelector('.error')
 
-          error = document.querySelector('.error')
-
-          expect(error).to.be(null)
-        })
-      })
-
-      describe('on a checkbox', () => {
-        beforeEach(() => {
-          input = document.querySelector('input[type="checkbox"]')
-        })
-
-        it('adds an error message after the node when not validated', () => {
-          widgets.dispatch(input, 'change')
-
-          error = document.querySelector('.error')
-
-          expect(error).not.to.be(null)
-          expect(nodeIndex(error)).to.eql(nodeIndex(input) + 1)
-        })
-
-        it('removes the error once it validates', () => {
-          widgets.dispatch(input, 'change')
-
-          input.checked = true
-          widgets.dispatch(input, 'change')
-
-          error = document.querySelector('.error')
-
-          expect(error).to.be(null)
-        })
-      })
-
-      describe('on a textarea', () => {
-        beforeEach(() => {
-          input = document.querySelector('textarea')
-        })
-
-        it('adds an error message after the node when not validated', () => {
-          widgets.dispatch(input, 'change')
-
-          error = document.querySelector('.error')
-
-          expect(error).not.to.be(null)
-          expect(nodeIndex(error)).to.eql(nodeIndex(input) + 1)
-        })
-
-        it('removes the error once it validates', () => {
-          widgets.dispatch(input, 'change')
-
-          input.value = 'foo'
-          widgets.dispatch(input, 'change')
-
-          error = document.querySelector('.error')
-
-          expect(error).to.be(null)
-        })
-      })
-
-      describe('on a select', () => {
-        beforeEach(() => {
-          input = document.querySelector('select')
-        })
-
-        it('adds an error message after the node when not validated', () => {
-          widgets.dispatch(input, 'change')
-
-          error = document.querySelector('.error')
-
-          expect(error).not.to.be(null)
-          expect(nodeIndex(error)).to.eql(nodeIndex(input) + 1)
-        })
-
-        it('removes the error once it validates', () => {
-          widgets.dispatch(input, 'change')
-
-          input.selectedIndex = 1
-          widgets.dispatch(input, 'change')
-
-          error = document.querySelector('.error')
-
-          expect(error).to.be(null)
+            expect(error).to.be(null)
+          })
         })
       })
     })
