@@ -81,5 +81,17 @@ describe('live-validation', () => {
         })
       })
     })
+
+    describe('with the validateOnInit param enabled', () => {
+      beforeEach(() => {
+        widgets('live-validation', '[required]', {
+          on: 'init',
+          validateOnInit: true
+        })
+      })
+      it('validates all the fields at init', () => {
+        expect(document.querySelector('.error')).not.to.be(null)
+      })
+    })
   })
 })
