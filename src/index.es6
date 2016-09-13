@@ -1,5 +1,5 @@
 import widgets from 'widjet'
-import {DisposableEvent} from 'widjet-disposables'
+import {DisposableEvent, Disposable, CompositeDisposable} from 'widjet-disposables'
 import {getNode, detachNode} from 'widjet-utils'
 
 import DEFAULT_VALIDATORS from './validators'
@@ -39,9 +39,10 @@ widgets.define('live-validation', (input, options = {}) => {
     return res != null
   }
 
-  const subscription = new DisposableEvent(input, 'change blur', () => {
-    input.validate()
-  })
+  const subscription = new CompositeDisposable([
+    new DisposableEvent(input, 'change blur', () => input.validate()),
+    new Disposable(() => delete input.validate)
+  ])
 
   if (options.validateOnInit) { input.validate() }
 
