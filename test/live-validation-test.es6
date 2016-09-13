@@ -1,16 +1,22 @@
 import expect from 'expect.js'
 import jsdom from 'mocha-jsdom'
 import widgets from 'widjet'
+import {clearNodeCache} from 'widjet-utils'
 
 import '../src/index'
 
 describe('live-validation', () => {
-  let [input] = []
+  let input
 
   jsdom()
 
   describe('with a form with required fields', () => {
     beforeEach(() => {
+      clearNodeCache()
+
+      widgets.release('live-validation')
+      widgets.release('form-validation')
+
       document.body.innerHTML = `
         <form>
           <input type='text' name='name' required>
