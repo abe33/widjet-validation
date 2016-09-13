@@ -1,12 +1,13 @@
 import expect from 'expect.js'
 import jsdom from 'mocha-jsdom'
 import widgets from 'widjet'
+import sinon from 'sinon'
 import {clearNodeCache} from 'widjet-utils'
 
 import '../src/index'
 
 describe('form-validation', () => {
-  let form
+  let form, input
 
   jsdom()
 
@@ -47,6 +48,7 @@ describe('form-validation', () => {
       `
 
       form = document.querySelector('form')
+      input = document.querySelector('input')
     })
 
     describe('with no config and no live validation', () => {
@@ -66,6 +68,21 @@ describe('form-validation', () => {
         it('validates the required fields', () => {
           expect(document.querySelectorAll('.error')).to.have.length(7)
         })
+      })
+    })
+
+    describe('with no config but live validation', () => {
+      beforeEach(() => {
+        widgets('live-validation', '[required]', {on: 'init'})
+        widgets('form-validation', 'form', {on: 'init'})
+
+        sinon.stub(input, 'validate')
+
+        widgets.dispatch(form, 'submit')
+      })
+
+      it('validates the required fields', () => {
+        expect(input.validate.called).to.be(true)
       })
     })
   })
