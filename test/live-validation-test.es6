@@ -101,9 +101,42 @@ describe('live-validation', () => {
           i18n: k => k.toUpperCase()
         })
       })
-      it('validates all the fields at init', () => {
+      it('passes the error string to the locale method', () => {
         const error = document.querySelector('.error')
         expect(error.textContent).to.eql('BLANK_VALUE')
+      })
+    })
+
+    describe('with custom validators', () => {
+      beforeEach(() => {
+        widgets('live-validation', '[required]', {
+          on: 'init',
+          validateOnInit: true,
+          validators: [
+            [i => i.nodeName === 'INPUT', i => 'some error']
+          ]
+        })
+      })
+
+      it('runs the passed-in validators in priority', () => {
+        const error = document.querySelector('.error')
+        expect(error.textContent).to.eql('some error')
+      })
+    })
+
+    describe('with custom resolvers', () => {
+      beforeEach(() => {
+        widgets('live-validation', '[required]', {
+          on: 'init',
+          validateOnInit: true,
+          resolvers: [
+            [i => true, i => 'some value']
+          ]
+        })
+      })
+
+      it('uses the passed-in resolvers to get the input values', () => {
+        expect(document.querySelector('.error')).to.be(null)
       })
     })
 
