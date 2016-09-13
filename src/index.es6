@@ -22,12 +22,15 @@ widgets.define('live-validation', (input, options = {}) => {
 })
 
 widgets.define('form-validation', (form, options = {}) => {
+  const required = options.required || '[required]'
   const validator = getValidator(options)
   const reducer = (memo, item) =>
     (item.validate ? item.validate() : validator(item)) || memo
 
   form.validate = () =>
-    asArray(form.querySelectorAll('[required]')).reduce(reducer, false)
+    asArray(form.querySelectorAll(required)).reduce(reducer, false)
+
+  if (options.validateOnInit) { form.validate() }
 
   return new CompositeDisposable([
     new Disposable(() => {

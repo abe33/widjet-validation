@@ -85,5 +85,81 @@ describe('form-validation', () => {
         expect(input.validate.called).to.be(true)
       })
     })
+
+    describe('with required selector setting', () => {
+      beforeEach(() => {
+        widgets('form-validation', 'form', {
+          on: 'init',
+          required: 'input'
+        })
+
+        widgets.dispatch(form, 'submit')
+      })
+
+      it('validates the required fields', () => {
+        expect(document.querySelectorAll('.error')).to.have.length(4)
+      })
+    })
+
+    describe('with validateOnInit setting', () => {
+      beforeEach(() => {
+        widgets('form-validation', 'form', {
+          on: 'init',
+          validateOnInit: true
+        })
+      })
+
+      it('validates the required fields', () => {
+        expect(document.querySelectorAll('.error')).to.have.length(7)
+      })
+    })
+
+    describe('with custom validators', () => {
+      beforeEach(() => {
+        widgets('form-validation', 'form', {
+          on: 'init',
+          validateOnInit: true,
+          validators: [
+            [i => i.nodeName === 'INPUT', i => 'some error']
+          ]
+        })
+      })
+
+      it('runs the passed-in validators in priority', () => {
+        const error = document.querySelector('.error')
+        expect(error.textContent).to.eql('some error')
+      })
+    })
+
+    describe('with custom resolvers', () => {
+      beforeEach(() => {
+        widgets('form-validation', 'form', {
+          on: 'init',
+          validateOnInit: true,
+          resolvers: [
+            [i => true, i => 'some value']
+          ]
+        })
+      })
+
+      it('uses the passed-in resolvers to get the input values', () => {
+        expect(document.querySelector('.error')).to.be(null)
+      })
+    })
+
+    describe('with custom feedback methods', () => {
+      beforeEach(() => {
+        widgets('form-validation', 'form', {
+          on: 'init',
+          validateOnInit: true,
+          clean: i => i.classList.remove('error'),
+          onError: i => i.classList.add('error')
+        })
+      })
+
+      it('uses the provided methods', () => {
+        expect(document.querySelectorAll('[required].error')).to.have.length(9)
+      })
+    })
   })
 })
