@@ -1,19 +1,29 @@
 import {parent, asArray} from 'widjet-utils'
 
 export default [
-  [i => i.nodeName === 'INPUT' && i.type === 'checkbox', i => i.checked],
-  [i => i.nodeName === 'INPUT' && i.type === 'radio', i => {
-    const container = parent(i, 'form')
-    const checked = container && container.querySelector(`[name="${i.name}"]:checked`)
-    return checked ? checked.value : undefined
-  }],
-  [i => i.nodeName === 'SELECT' && i.multiple, i => optionValues(i)],
-  [i => i.nodeName === 'SELECT' && !i.multiple, i => optionValues(i)[0]],
+  [inputPredicate('checkbox'), i => i.checked],
+  [inputPredicate('number', 'range'), i => i.value && parseFloat(i.value)],
+  [inputPredicate('radio'), i => radioValue(parent(i, 'form'), i.name)],
+  [selectPredicate(true), i => optionValues(i)],
+  [selectPredicate(false), i => optionValues(i)[0]],
   [i => true, i => i.value]
 ]
 
-function optionValues (i) {
-  return asArray(i.querySelectorAll('option'))
+function optionValues (input) {
+  return asArray(input.querySelectorAll('option'))
   .filter(o => o.selected)
   .map(o => o.value)
+}
+
+function radioValue (form, name) {
+  const checked = form && form.querySelector(`[name="${name}"]:checked`)
+  return checked ? checked.value : undefined
+}
+
+function inputPredicate (...types) {
+  return input => input.nodeName === 'INPUT' && types.indexOf(input.type) > -1
+}
+
+function selectPredicate (multiple) {
+  return input => input.nodeName === 'SELECT' && input.multiple === multiple
 }

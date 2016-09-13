@@ -15,6 +15,8 @@ describe('live-validation', () => {
         <form>
           <input type='text' name='name' required>
 
+          <input type='number' name='num' required>
+
           <input type='checkbox' name='tos' required>
 
           <input type='radio' name='radio' value='1' required>
@@ -41,6 +43,7 @@ describe('live-validation', () => {
 
     const inputs = [
       ['input[type="text"]', input => input.value = 'foo'],
+      ['input[type="number"]', input => input.value = '0'],
       ['input[type="checkbox"]', input => input.checked = true],
       ['input[type="radio"]', input => input.checked = true],
       ['select:not([multiple])', input => input.selectedIndex = 1],
