@@ -1,6 +1,6 @@
 import widgets from 'widjet'
 import {DisposableEvent, Disposable, CompositeDisposable} from 'widjet-disposables'
-import {getNode, detachNode} from 'widjet-utils'
+import {asArray, getNode, detachNode} from 'widjet-utils'
 
 import DEFAULT_VALIDATORS from './validators'
 import DEFAULT_RESOLVERS from './resolvers'
@@ -9,6 +9,44 @@ import {when, curry2, compose} from './utils'
 // const log = (v) => { console.log(v); return v }
 
 widgets.define('live-validation', (input, options = {}) => {
+  const validator = getValidator(options)
+
+  input.validate = () => validator(input)
+
+  const subscription = new CompositeDisposable([
+    new DisposableEvent(input, 'change blur', () => input.validate()),
+    new Disposable(() => delete input.validate)
+  ])
+
+  if (options.validateOnInit) { input.validate() }
+
+  return subscription
+})
+
+widgets.define('form-validation', (form, options = {}) => {
+  const validator = getValidator(options)
+  const reducer = (memo, item) => validator(item) || memo
+
+  form.validate = () =>
+    asArray(form.querySelectorAll('[required]')).reduce(reducer, false)
+
+  return new CompositeDisposable([
+    new Disposable(() => {
+      form.removeAttribute('novalidate')
+      delete form.validate
+    }),
+    new DisposableEvent(form, 'submit', (e) => {
+      const hasErrors = form.validate()
+      if (hasErrors) {
+        e.stopImmediatePropagation()
+        e.preventDefault()
+      }
+      return !hasErrors
+    })
+  ])
+})
+
+function getValidator (options) {
   const validators = (options.validators || []).concat(DEFAULT_VALIDATORS)
   const resolvers = (options.resolvers || []).concat(DEFAULT_RESOLVERS)
   const i18n = options.i18n || (k => k)
@@ -28,33 +66,11 @@ widgets.define('live-validation', (input, options = {}) => {
     return [predicate, compose(curry2(validate)(i18n), when(resolvers))]
   }))
 
-  input.validate = () => {
+  return input => {
     clean(input)
     const res = validator(input)
 
     res != null ? onError(input, res) : onSuccess(input)
     return res != null
   }
-
-  const subscription = new CompositeDisposable([
-    new DisposableEvent(input, 'change blur', () => input.validate()),
-    new Disposable(() => delete input.validate)
-  ])
-
-  if (options.validateOnInit) { input.validate() }
-
-  return subscription
-})
-
-// widgets.define('form-validation', (form) => {
-//   form.setAttribute('novalidate', 'novalidate')
-//
-//   form.addEventListener('submit', (e) => {
-//     const required = form.querySelectorAll('[required]')
-//     const reducer = (memo, item) => memo || validate(item)
-//     const hasErrors = asArray(required).reduce(reducer, false)
-//
-//     if (hasErrors) { e.stopImmediatePropagation() }
-//     return !hasErrors
-//   })
-// })
+}
