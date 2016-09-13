@@ -13,14 +13,12 @@ widgets.define('live-validation', (input, options = {}) => {
 
   input.validate = () => validator(input)
 
-  const subscription = new CompositeDisposable([
+  if (options.validateOnInit) { input.validate() }
+
+  return new CompositeDisposable([
     new DisposableEvent(input, 'change blur', () => input.validate()),
     new Disposable(() => delete input.validate)
   ])
-
-  if (options.validateOnInit) { input.validate() }
-
-  return subscription
 })
 
 widgets.define('form-validation', (form, options = {}) => {
