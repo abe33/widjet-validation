@@ -1,6 +1,6 @@
 import widgets from 'widjet'
 import {DisposableEvent} from 'widjet-disposables'
-import {getNode, detachNode, nodeIndex} from 'widjet-utils'
+import {getNode, detachNode} from 'widjet-utils'
 
 import DEFAULT_VALIDATORS from './validators'
 import DEFAULT_RESOLVERS from './resolvers'
@@ -12,54 +12,41 @@ widgets.define('live-validation', (input, options = {}) => {
   const validators = (options.validators || []).concat(DEFAULT_VALIDATORS)
   const resolvers = (options.resolvers || []).concat(DEFAULT_RESOLVERS)
   const i18n = options.i18n || (k => k)
-  const fieldValue = when(resolvers)
+  const onSuccess = options.onSuccess || (i => i)
 
+  const onError = options.onError || ((input, res) => {
+    const prevError = document.querySelector(`[name="${input.name}"] + .error`)
+    if (prevError) { detachNode(prevError) }
+
+    const error = getNode(`<div class='error'>${res}</div>`)
+    input.parentNode.insertBefore(error, input.nextElementSibling)
+  })
+  const clean = options.clean || ((input) => {
+    const next = input.nextElementSibling
+    if (next && next.classList.contains('error')) { detachNode(next) }
+  })
+
+  const fieldValue = when(resolvers)
   const validator = when(validators.map(([predicate, validate]) => {
     return [predicate, compose(curry2(validate)(i18n), fieldValue)]
   }))
 
+  input.validate = () => {
+    clean(input)
+    const res = validator(input)
+
+    res != null ? onError(input, res) : onSuccess(input)
+    return res != null
+  }
+
   const subscription = new DisposableEvent(input, 'change blur', () => {
-    validate(validator, input)
+    input.validate()
   })
 
-  if (options.validateOnInit) { validate(validator, input) }
+  if (options.validateOnInit) { input.validate() }
 
   return subscription
 })
-
-function validate (validator, input) {
-  const field = input.parentNode
-  const index = nodeIndex(input)
-
-  removeFieldFeedback(field)
-
-  const res = validator(input)
-
-  if (res != null) {
-    addFieldErrorFeedback(field, index, res)
-    return true
-  } else {
-    addFieldSuccessFeedback(field)
-    return false
-  }
-}
-
-function addFieldSuccessFeedback (field) {
-  // field.classList.add('has-success')
-  //
-  // const label = field.querySelector('label')
-  // label.insertBefore(getNode('<i class="icon-tick feedback-icon"></i>'), label.firstChild)
-}
-
-function addFieldErrorFeedback (field, index, res) {
-  const error = getNode(`<div class='error'>${res}</div>`)
-  field.insertBefore(error, field.children[index + 1])
-}
-
-function removeFieldFeedback (field) {
-  const error = field.querySelector('.error')
-  if (error) { detachNode(error) }
-}
 
 // widgets.define('form-validation', (form) => {
 //   form.setAttribute('novalidate', 'novalidate')

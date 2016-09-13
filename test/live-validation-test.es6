@@ -1,12 +1,11 @@
 import expect from 'expect.js'
 import jsdom from 'mocha-jsdom'
 import widgets from 'widjet'
-import {nodeIndex} from 'widjet-utils'
 
 import '../src/index'
 
 describe('live-validation', () => {
-  let [input, error] = []
+  let [input] = []
 
   jsdom()
 
@@ -62,10 +61,10 @@ describe('live-validation', () => {
           it('adds an error message after the node when not validated', () => {
             widgets.dispatch(input, 'change')
 
-            error = document.querySelector('.error')
+            const next = input.nextElementSibling
 
-            expect(error).not.to.be(null)
-            expect(nodeIndex(error)).to.eql(nodeIndex(input) + 1)
+            expect(next).not.to.be(null)
+            expect(next != null && next.classList.contains('error')).to.be(true)
           })
 
           it('removes the error once it validates', () => {
@@ -74,9 +73,9 @@ describe('live-validation', () => {
             changeValue(input)
             widgets.dispatch(input, 'change')
 
-            error = document.querySelector('.error')
+            const next = input.nextElementSibling
 
-            expect(error).to.be(null)
+            expect(next != null && next.classList.contains('error')).to.be(false)
           })
         })
       })
@@ -90,7 +89,7 @@ describe('live-validation', () => {
         })
       })
       it('validates all the fields at init', () => {
-        expect(document.querySelector('.error')).not.to.be(null)
+        expect(document.querySelectorAll('.error')).to.have.length(inputs.length)
       })
     })
 
@@ -105,6 +104,30 @@ describe('live-validation', () => {
       it('validates all the fields at init', () => {
         const error = document.querySelector('.error')
         expect(error.textContent).to.eql('BLANK_VALUE')
+      })
+    })
+
+    describe('with custom feedback methods', () => {
+      beforeEach(() => {
+        widgets('live-validation', '[required]', {
+          on: 'init',
+          validateOnInit: true,
+          clean: i => i.classList.remove('error'),
+          onError: i => i.classList.add('error')
+        })
+      })
+
+      it('uses the provided methods', () => {
+        inputs.forEach(([selector, changeValue]) => {
+          input = document.querySelector(selector)
+
+          expect(input.classList.contains('error')).to.be(true)
+
+          changeValue(input)
+          widgets.dispatch(input, 'change')
+
+          expect(input.classList.contains('error')).to.be(false)
+        })
       })
     })
   })
