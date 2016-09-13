@@ -13,7 +13,6 @@ widgets.define('live-validation', (input, options = {}) => {
   const resolvers = (options.resolvers || []).concat(DEFAULT_RESOLVERS)
   const i18n = options.i18n || (k => k)
   const onSuccess = options.onSuccess || (i => i)
-
   const onError = options.onError || ((input, res) => {
     const prevError = document.querySelector(`[name="${input.name}"] + .error`)
     if (prevError) { detachNode(prevError) }
@@ -25,10 +24,8 @@ widgets.define('live-validation', (input, options = {}) => {
     const next = input.nextElementSibling
     if (next && next.classList.contains('error')) { detachNode(next) }
   })
-
-  const fieldValue = when(resolvers)
   const validator = when(validators.map(([predicate, validate]) => {
-    return [predicate, compose(curry2(validate)(i18n), fieldValue)]
+    return [predicate, compose(curry2(validate)(i18n), when(resolvers))]
   }))
 
   input.validate = () => {
