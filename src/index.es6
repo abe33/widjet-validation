@@ -52,19 +52,10 @@ widgets.define('form-validation', (form, options = {}) => {
 function getValidator (options) {
   const validators = (options.validators || []).concat(DEFAULT_VALIDATORS)
   const resolvers = (options.resolvers || []).concat(DEFAULT_RESOLVERS)
-  const onError = options.onError || ((input, res) => {
-    const prevError = document.querySelector(`[name="${input.name}"] + .error`)
-    if (prevError) { detachNode(prevError) }
-
-    const error = getNode(`<div class='error'>${res}</div>`)
-    input.parentNode.insertBefore(error, input.nextElementSibling)
-  })
-  const clean = options.clean || ((input) => {
-    const next = input.nextElementSibling
-    if (next && next.classList.contains('error')) { detachNode(next) }
-  })
   const i18n = options.i18n || identity
   const onSuccess = options.onSuccess || identity
+  const onError = options.onError || defaultErrorFeedback
+  const clean = options.clean || defaultCleanFeedback
   const validator = when(validators.map(([predicate, validate]) => {
     return [predicate, compose(curry2(validate)(i18n), when(resolvers))]
   }))
@@ -76,4 +67,17 @@ function getValidator (options) {
     res != null ? onError(input, res) : onSuccess(input)
     return res != null
   }
+}
+
+function defaultErrorFeedback (input, res) {
+  const prevError = document.querySelector(`[name="${input.name}"] + .error`)
+  if (prevError) { detachNode(prevError) }
+
+  const error = getNode(`<div class='error'>${res}</div>`)
+  input.parentNode.insertBefore(error, input.nextElementSibling)
+}
+
+function defaultCleanFeedback (input) {
+  const next = input.nextElementSibling
+  if (next && next.classList.contains('error')) { detachNode(next) }
 }
