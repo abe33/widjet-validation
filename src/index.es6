@@ -24,6 +24,7 @@ widgets.define('live-validation', (input, options = {}) => {
 
 widgets.define('form-validation', (form, options = {}) => {
   const required = options.required || '[required]'
+  const events = options.events || 'submit'
   const validator = getValidator(options)
   const reducer = (memo, item) =>
     (item.validate ? item.validate() : validator(item)) || memo
@@ -38,7 +39,7 @@ widgets.define('form-validation', (form, options = {}) => {
       form.removeAttribute('novalidate')
       delete form.validate
     }),
-    new DisposableEvent(form, 'submit', (e) => {
+    new DisposableEvent(form, events, (e) => {
       const hasErrors = form.validate()
       if (hasErrors) {
         e.stopImmediatePropagation()

@@ -101,6 +101,21 @@ describe('form-validation', () => {
       })
     })
 
+    describe('with the events setting defined', () => {
+      beforeEach(() => {
+        widgets('form-validation', 'form', {
+          on: 'init',
+          events: 'foo'
+        })
+
+        widgets.dispatch(form, 'foo')
+      })
+
+      it('validates the required fields', () => {
+        expect(document.querySelectorAll('.error')).to.have.length(7)
+      })
+    })
+
     describe('with validateOnInit setting', () => {
       beforeEach(() => {
         widgets('form-validation', 'form', {
