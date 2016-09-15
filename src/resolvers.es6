@@ -1,4 +1,5 @@
 import {parent, asArray} from 'widjet-utils'
+import {inputPredicate, selectPredicate} from './utils'
 
 export default [
   [inputPredicate('checkbox'), i => i.checked],
@@ -18,12 +19,4 @@ function optionValues (input) {
 function radioValue (form, name) {
   const checked = form && form.querySelector(`[name="${name}"]:checked`)
   return checked ? checked.value : undefined
-}
-
-function inputPredicate (...types) {
-  return input => input.nodeName === 'INPUT' && types.indexOf(input.type) > -1
-}
-
-function selectPredicate (multiple) {
-  return input => input.nodeName === 'SELECT' && input.multiple === multiple
 }

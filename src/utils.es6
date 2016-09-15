@@ -40,3 +40,11 @@ export function compose (...fns) {
   fns.push(apply(fns.pop()))
   return (...args) => fns.reduceRight((memo, fn) => fn(memo), args)
 }
+
+export function inputPredicate (...types) {
+  return input => input.nodeName === 'INPUT' && types.indexOf(input.type) > -1
+}
+
+export function selectPredicate (multiple) {
+  return input => input.nodeName === 'SELECT' && input.multiple === multiple
+}

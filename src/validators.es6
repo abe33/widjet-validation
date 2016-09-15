@@ -1,3 +1,4 @@
+import {inputPredicate} from './utils'
 
 export function validatePresence (i18n, t) {
   return (t != null) && t.length !== 0 ? null : i18n('blank_value')
@@ -14,7 +15,7 @@ export function validateEmail (i18n, t) {
 }
 
 export default [
-  [i => i.nodeName === 'INPUT' && i.type === 'email', validateEmail],
-  [i => i.nodeName === 'INPUT' && i.type === 'checkbox', validateChecked],
+  [inputPredicate('email'), validateEmail],
+  [inputPredicate('checkbox'), validateChecked],
   [i => true, validatePresence]
 ]
