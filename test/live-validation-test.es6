@@ -102,6 +102,31 @@ describe('live-validation', () => {
       })
     })
 
+    describe('with the events param defined', () => {
+      beforeEach(() => {
+        widgets('live-validation', '[required]', {
+          on: 'init',
+          events: 'foo'
+        })
+      })
+      inputs.forEach(([selector, changeValue]) => {
+        describe(`on ${selector}`, () => {
+          beforeEach(() => {
+            input = document.querySelector(selector)
+          })
+
+          it('validates the input on the specified event', () => {
+            widgets.dispatch(input, 'foo')
+
+            const next = input.nextElementSibling
+
+            expect(next).not.to.be(null)
+            expect(next != null && next.classList.contains('error')).to.be(true)
+          })
+        })
+      })
+    })
+
     describe('with a locale function provided', () => {
       beforeEach(() => {
         widgets('live-validation', '[required]', {

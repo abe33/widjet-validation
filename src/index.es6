@@ -10,13 +10,14 @@ import {when, curry2, compose} from './utils'
 
 widgets.define('live-validation', (input, options = {}) => {
   const validator = getValidator(options)
+  const events = options.events || 'change blur'
 
   input.validate = () => validator(input)
 
   if (options.validateOnInit) { input.validate() }
 
   return new CompositeDisposable([
-    new DisposableEvent(input, 'change blur', () => input.validate()),
+    new DisposableEvent(input, events, () => input.validate()),
     new Disposable(() => delete input.validate)
   ])
 })
