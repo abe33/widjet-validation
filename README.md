@@ -18,7 +18,9 @@ widgets('live-validation', '[required]', {on: 'load'})
 widgets('form-validation', 'form', {on: 'load'})
 ```
 
-This package provides two widgets, `live-validation` and `form-validation`. The former validates inputs as they change, while the latter ensures that a form cannot be submitted when some of its required field are still invalid.
+This package provides two widgets, `live-validation` and `form-validation`.
+
+The former validates inputs as they change, while the latter ensures that a form cannot be submitted when some of its required field are still invalid.
 
 Both widgets use the same validation mecanisms, meaning that both widgets can share the same config.
 
@@ -34,11 +36,20 @@ The main difference with `live-validation`, beside the registered events, is tha
 
 ## Core Principles
 
+### Validation Flow
+
+The validation flows as follow:
+
+1. When a validation for an input is performed the first step is to clean the already existing feedbacks, if any, the `clean` function is thus called with that input as argument.
+2. The input is then passed to a resolver in order to retrieve its value. Resolvers mecanism is described below.
+3. Once retrieved, the value is passed to a validator. The validator either returns `null` if the value is valid or a `String` with the validation error message.
+4. Depending on the validator result the success or error feedback function will be called for that input.
+
 ### Value Resolvers
 
-A resolver is a function that takes an HTML element as argument and that returns its value in a JavaScript-friendly type. A resolver is always defined along with a predicate function that also takes an HTML element as argument and returns whether the resolver applies to this element or not.
+A resolver is a function that takes an HTML element as argument and returns its value in a JavaScript-friendly type. A resolver is always defined along with a predicate function that also takes an HTML element as argument and returns whether the resolver applies to this element or not.
 
-For instance, the resolver for inputs of type `checkbox` are defined like this:
+For instance, the resolver for inputs of type `checkbox` is defined like this:
 
 ```js
 const checkboxResolver = [
@@ -53,20 +64,23 @@ The fallback resolver is defined like this:
 const defaultResolver = [i => true, i => i.value]
 ```
 
-Resolvers are stored in an array and evaluated in order. When a predicate function returns `true` the resolver function is called the value returned
-by the resolver will be used.
+Resolvers are stored in an array and evaluated in order. When a predicate function returns `true` the resolver function is called and the value it returns
+will be used in the validation.
 
 ```js
 const resolvers = [
-  [i => i.nodeName === 'INPUT' && i.type === 'checkbox', i => i.checked],
+  [
+    i => i.nodeName === 'INPUT' && i.type === 'checkbox',
+    i => i.checked
+  ],
   // other resolvers...
-  [i => true, i => i.value]
+  [i => true, i => i.value] // catch all resolver
 ]
 ```
 
 ### Value Validators
 
-A validator, like a resolver, combines a predicate function with a validation function. The validation function takes a translation function and a value and should return either `undefined` if the value is valid or a string with the error message if the value isn't valid.
+A validator, like a resolver, combines a predicate function with a validation function. The validation function takes a translation function and a value and should return either `null` if the value is valid or a string with the error message if the value isn't valid.
 
 For instance the presence validation function is defined as follow:
 
@@ -93,7 +107,7 @@ The default validator being defined with:
 const defaultValidator = [i => true, validatePresence]
 ```
 
-Put together, as for resolvers, validators are stored in an array:
+Put together, as for resolvers, validators are stored in an array and the first whose predicate matches will be used to validate the current input:
 
 ```js
 const validators = [
@@ -102,19 +116,33 @@ const validators = [
     (i18n, value) => value ? null : i18n('unchecked')
   ],
   // other validators...
-  [i => true, validatePresence]
+  [i => true, validatePresence] // catch all validator
 ]
 ```
+
+### Feedback Functions
+
+The validation feedback are handled by a group of three functions, one for cleaning the feedback for an input, and two to display success and error in the validation.
+
+By default, only an error feedback is provided, in the form of a `div` with the class `error` appended after the target input in the DOM. On that principle, the default `clean` implementation will look for a `div.error` after the target input and remove it.
 
 ## Configuration
 
 #### Options common to both widgets
 
-|Option|Description|
+|Option|Type|Description|
 |---|---|
-|`i18n`|TODO|
-|`onError`|TODO|
-|`onSucces`|TODO|
-|`resolvers`|TODO|
-|`validateOnInit`|TODO|
-|`validators`|TODO|
+|`clean`|`function(input)`|Given an input to validate, this function will be called to remove any previous validation feedback|
+|`events`|`String`|A space-separated string containing the events that will trigger the validation, i.e `change blur`|
+|`i18n`|`function(string):string`|A function to translate the error messages from the validators|
+|`onError`|`function(input, msg)`|Given an input whose validation failed, this function will be called with the input and the error message to provide the visual feedback|
+|`onSucces`|`function(input)`|Given an input whose validation succeeded, this function will be called with the input to provide the visual feedback|
+|`resolvers`|`Array`|An array of extra resolvers to apply before the provided ones|
+|`validateOnInit`|`Boolean`|If true, a validation of all the target fields will be performed during the initialization of the widget|
+|`validators`|`Array`|An array of extra validators to apply before the provided ones|
+
+#### form-validation Options
+
+|Option|Type|Description|
+|---|---|
+|`required`|`String`|A CSS selector to match the field that will be targeted by the form validation, it defaults to `[required]`|
