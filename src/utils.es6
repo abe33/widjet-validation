@@ -27,6 +27,9 @@ export const curry4 = curryN(2, curryN)(4)
 
 export const apply = curry2((fn, args) => fn.apply(null, args))
 
+export const identity = a => a
+export const always = a => true
+
 export const when = curry2((predicates, value) => {
   const {length} = predicates
   for (let i = 0; i < length; i++) {

@@ -4,7 +4,7 @@ import {asArray, getNode, detachNode} from 'widjet-utils'
 
 import DEFAULT_VALIDATORS from './validators'
 import DEFAULT_RESOLVERS from './resolvers'
-import {when, curry2, compose} from './utils'
+import {when, curry2, compose, identity} from './utils'
 
 // const log = (v) => { console.log(v); return v }
 
@@ -52,8 +52,6 @@ widgets.define('form-validation', (form, options = {}) => {
 function getValidator (options) {
   const validators = (options.validators || []).concat(DEFAULT_VALIDATORS)
   const resolvers = (options.resolvers || []).concat(DEFAULT_RESOLVERS)
-  const i18n = options.i18n || (k => k)
-  const onSuccess = options.onSuccess || (i => i)
   const onError = options.onError || ((input, res) => {
     const prevError = document.querySelector(`[name="${input.name}"] + .error`)
     if (prevError) { detachNode(prevError) }
@@ -65,6 +63,8 @@ function getValidator (options) {
     const next = input.nextElementSibling
     if (next && next.classList.contains('error')) { detachNode(next) }
   })
+  const i18n = options.i18n || identity
+  const onSuccess = options.onSuccess || identity
   const validator = when(validators.map(([predicate, validate]) => {
     return [predicate, compose(curry2(validate)(i18n), when(resolvers))]
   }))

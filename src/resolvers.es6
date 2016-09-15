@@ -1,5 +1,5 @@
 import {parent, asArray} from 'widjet-utils'
-import {inputPredicate, selectPredicate} from './utils'
+import {always, inputPredicate, selectPredicate} from './utils'
 
 export default [
   [inputPredicate('checkbox'), i => i.checked],
@@ -7,7 +7,7 @@ export default [
   [inputPredicate('radio'), i => radioValue(parent(i, 'form'), i.name)],
   [selectPredicate(true), i => optionValues(i)],
   [selectPredicate(false), i => optionValues(i)[0]],
-  [i => true, i => i.value]
+  [always, i => i.value]
 ]
 
 function optionValues (input) {

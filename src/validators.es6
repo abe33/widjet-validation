@@ -1,4 +1,4 @@
-import {inputPredicate} from './utils'
+import {inputPredicate, always} from './utils'
 
 export function validatePresence (i18n, value) {
   return value != null && value.length !== 0 ? null : i18n('blank_value')
@@ -17,5 +17,5 @@ export function validateEmail (i18n, value) {
 export default [
   [inputPredicate('email'), validateEmail],
   [inputPredicate('checkbox'), validateChecked],
-  [i => true, validatePresence]
+  [always, validatePresence]
 ]
