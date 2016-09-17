@@ -130,9 +130,9 @@ By default, only an error feedback is provided, in the form of a `div` with the 
 
 #### Options common to both widgets
 
-|Option|Type|Description|
-|---|---|
-|`clean`|`function(input)`|Given an input to validate, this function will be called to remove any previous validation feedback|
+Option|Type|Description|
+|---|---|---|
+`clean`|`function(input)`|Given an input to validate, this function will be called to remove any previous validation feedback|
 |`events`|`String`|A space-separated string containing the events that will trigger the validation, i.e `change blur`|
 |`i18n`|`function(string):string`|A function to translate the error messages from the validators|
 |`onError`|`function(input, msg)`|Given an input whose validation failed, this function will be called with the input and the error message to provide the visual feedback|
@@ -144,5 +144,5 @@ By default, only an error feedback is provided, in the form of a `div` with the 
 #### form-validation Options
 
 |Option|Type|Description|
-|---|---|
+|---|---|---|
 |`required`|`String`|A CSS selector to match the field that will be targeted by the form validation, it defaults to `[required]`|
