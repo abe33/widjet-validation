@@ -1,6 +1,6 @@
 {
   "name": "widjet-validation",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A validation widget for widjet",
   "main": "lib/index.js",
   "scripts": {
