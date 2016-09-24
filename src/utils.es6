@@ -12,10 +12,6 @@ const _curry = (n, fn, curryArgs = []) => {
   }
 }
 
-export function curry (fn) {
-  return _curry(fn.length, fn)
-}
-
 export function curryN (n, fn) {
   return _curry(n, fn)
 }
