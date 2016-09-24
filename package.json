@@ -11,7 +11,7 @@
     "esdoc": "esdoc -c esdoc.json",
     "install": "npm run babel"
   },
-  "keywords": ["widgets", "widget", "web", "widjet", "drag-and-drop", "validation"],
+  "keywords": ["widgets", "widget", "web", "widjet", "validation"],
   "repository": {
     "type": "git",
     "url": "git://github.com/abe33/widjet-validation.git"
