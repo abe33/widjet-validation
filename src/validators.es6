@@ -1,4 +1,5 @@
-import {inputPredicate, always} from './utils'
+import {inputPredicate} from './utils'
+import {always} from 'widjet-utils'
 
 export function validatePresence (i18n, value) {
   return value != null && value.length !== 0 ? null : i18n('blank_value')

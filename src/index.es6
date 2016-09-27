@@ -1,12 +1,9 @@
 import widgets from 'widjet'
 import {DisposableEvent, Disposable, CompositeDisposable} from 'widjet-disposables'
-import {asArray, getNode, detachNode} from 'widjet-utils'
+import {when, curry2, compose, identity, asArray, getNode, detachNode} from 'widjet-utils'
 
 import DEFAULT_VALIDATORS from './validators'
 import DEFAULT_RESOLVERS from './resolvers'
-import {when, curry2, compose, identity} from './utils'
-
-// const log = (v) => { console.log(v); return v }
 
 widgets.define('live-validation', (input, options = {}) => {
   const validator = getValidator(options)

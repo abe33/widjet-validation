@@ -1,5 +1,5 @@
-import {parent, asArray} from 'widjet-utils'
-import {always, inputPredicate, selectPredicate} from './utils'
+import {parent, asArray, always} from 'widjet-utils'
+import {inputPredicate, selectPredicate} from './utils'
 
 export default [
   [inputPredicate('checkbox'), i => i.checked],
