@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 import {validatePresence, validateChecked, validateEmail} from '../src/validators'
-import {identity} from '../src/utils'
+import {identity} from 'widjet-utils'
 
 describe('validators', () => {
   describe('.validatePresence()', () => {
