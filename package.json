@@ -5,12 +5,13 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha --timeout 5000 --recursive --compilers js:babel-register test/**/*.es6 test/*.es6",
+    "lcov_report": "nyc report --reporter=lcov",
     "babel": "babel src --out-dir lib",
     "standard": "standard src/*.es6 test/*.es6",
     "esdoc": "esdoc -c esdoc.json",
     "install": "npm run babel"
   },
-  "keywords": ["widgets", "widget", "web", "widjet", "drag-and-drop", "validation"],
+  "keywords": ["widgets", "widget", "web", "widjet", "validation"],
   "repository": {
     "type": "git",
     "url": "git://github.com/abe33/widjet-validation.git"
@@ -26,6 +27,7 @@
     "expect.js": "^0.3.1",
     "mocha": "^2.3.4",
     "mocha-jsdom": "^1.1.0",
+    "nyc": "^8.3.0",
     "sinon": "^1.17.4",
     "standard": "^5.4.1"
   },
@@ -46,6 +48,26 @@
     ]
   },
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "es2015"
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
+  },
+  "nyc": {
+    "include": [
+      "src/*.es6"
+    ],
+    "extension": [
+      ".es6"
+    ],
+    "require": [
+      "babel-register"
+    ]
   }
 }
