@@ -1,4 +1,4 @@
-# widjet-validation [![Build Status](https://travis-ci.org/abe33/widjet-validation.svg?branch=master)](https://travis-ci.org/abe33/widjet-validation)
+# widjet-validation [![Build Status](https://travis-ci.org/abe33/widjet-validation.svg?branch=master)](https://travis-ci.org/abe33/widjet-validation) [![codecov](https://codecov.io/gh/abe33/widjet-validation/branch/master/graph/badge.svg)](https://codecov.io/gh/abe33/widjet-validation)
 
 A validation widget for [widjet](http://github.com/abe33/widjet).
 
