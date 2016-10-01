@@ -6,6 +6,8 @@ import DEFAULT_VALIDATORS from './validators'
 import DEFAULT_RESOLVERS from './resolvers'
 
 export { DEFAULT_VALIDATORS, DEFAULT_RESOLVERS }
+
+widgets.define('live-validation', (input, options) => {
   const validator = getValidator(options)
   const events = options.events || 'change blur'
 
@@ -19,7 +21,7 @@ export { DEFAULT_VALIDATORS, DEFAULT_RESOLVERS }
   ])
 })
 
-widgets.define('form-validation', (form, options = {}) => {
+widgets.define('form-validation', (form, options) => {
   const required = options.required || '[required]'
   const events = options.events || 'submit'
   const validator = getValidator(options)
