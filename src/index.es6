@@ -5,7 +5,7 @@ import {when, curry2, compose, identity, asArray, getNode, detachNode} from 'wid
 import DEFAULT_VALIDATORS from './validators'
 import DEFAULT_RESOLVERS from './resolvers'
 
-widgets.define('live-validation', (input, options = {}) => {
+export { DEFAULT_VALIDATORS, DEFAULT_RESOLVERS }
   const validator = getValidator(options)
   const events = options.events || 'change blur'
 
@@ -47,7 +47,7 @@ widgets.define('form-validation', (form, options = {}) => {
   ])
 })
 
-function getValidator (options) {
+export function getValidator (options) {
   const validators = (options.validators || []).concat(DEFAULT_VALIDATORS)
   const resolvers = (options.resolvers || []).concat(DEFAULT_RESOLVERS)
   const i18n = options.i18n || identity
