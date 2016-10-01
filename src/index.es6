@@ -7,46 +7,50 @@ import DEFAULT_RESOLVERS from './resolvers'
 
 export { DEFAULT_VALIDATORS, DEFAULT_RESOLVERS }
 
-widgets.define('live-validation', (input, options) => {
+widgets.define('live-validation', (options) => {
   const validator = getValidator(options)
   const events = options.events || 'change blur'
 
-  input.validate = () => validator(input)
+  return (input) => {
+    input.validate = () => validator(input)
 
-  if (options.validateOnInit) { input.validate() }
+    if (options.validateOnInit) { input.validate() }
 
-  return new CompositeDisposable([
-    new DisposableEvent(input, events, () => input.validate()),
-    new Disposable(() => delete input.validate)
-  ])
+    return new CompositeDisposable([
+      new DisposableEvent(input, events, () => input.validate()),
+      new Disposable(() => delete input.validate)
+    ])
+  }
 })
 
-widgets.define('form-validation', (form, options) => {
+widgets.define('form-validation', (options) => {
   const required = options.required || '[required]'
   const events = options.events || 'submit'
   const validator = getValidator(options)
   const reducer = (memo, item) =>
     (item.validate ? item.validate() : validator(item)) || memo
 
-  form.validate = () =>
-    asArray(form.querySelectorAll(required)).reduce(reducer, false)
+  return (form) => {
+    form.validate = () =>
+      asArray(form.querySelectorAll(required)).reduce(reducer, false)
 
-  if (options.validateOnInit) { form.validate() }
+    if (options.validateOnInit) { form.validate() }
 
-  return new CompositeDisposable([
-    new Disposable(() => {
-      form.removeAttribute('novalidate')
-      delete form.validate
-    }),
-    new DisposableEvent(form, events, (e) => {
-      const hasErrors = form.validate()
-      if (hasErrors) {
-        e.stopImmediatePropagation()
-        e.preventDefault()
-      }
-      return !hasErrors
-    })
-  ])
+    return new CompositeDisposable([
+      new Disposable(() => {
+        form.removeAttribute('novalidate')
+        delete form.validate
+      }),
+      new DisposableEvent(form, events, (e) => {
+        const hasErrors = form.validate()
+        if (hasErrors) {
+          e.stopImmediatePropagation()
+          e.preventDefault()
+        }
+        return !hasErrors
+      })
+    ])
+  }
 })
 
 export function getValidator (options) {
