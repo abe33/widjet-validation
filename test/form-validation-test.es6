@@ -2,6 +2,7 @@ import expect from 'expect.js'
 import jsdom from 'mocha-jsdom'
 import widgets from 'widjet'
 import sinon from 'sinon'
+import {setPageContent, getTestRoot} from 'widjet-test-utils/dom'
 import {clearNodeCache} from 'widjet-utils'
 
 import '../src/index'
@@ -18,7 +19,7 @@ describe('form-validation', () => {
       widgets.release('live-validation')
       widgets.release('form-validation')
 
-      document.body.innerHTML = `
+      setPageContent(`
         <form>
           <input type='text' name='name' required>
 
@@ -45,10 +46,10 @@ describe('form-validation', () => {
             <option value='value4'>Value 4</option>
           </select>
         </form>
-      `
+      `)
 
-      form = document.querySelector('form')
-      input = document.querySelector('input')
+      form = getTestRoot().querySelector('form')
+      input = getTestRoot().querySelector('input')
     })
 
     describe('with no config and no live validation', () => {
@@ -66,7 +67,7 @@ describe('form-validation', () => {
         })
 
         it('validates the required fields', () => {
-          expect(document.querySelectorAll('.error')).to.have.length(7)
+          expect(getTestRoot().querySelectorAll('.error')).to.have.length(7)
         })
       })
     })
@@ -97,7 +98,7 @@ describe('form-validation', () => {
       })
 
       it('validates the required fields', () => {
-        expect(document.querySelectorAll('.error')).to.have.length(4)
+        expect(getTestRoot().querySelectorAll('.error')).to.have.length(4)
       })
     })
 
@@ -112,7 +113,7 @@ describe('form-validation', () => {
       })
 
       it('validates the required fields', () => {
-        expect(document.querySelectorAll('.error')).to.have.length(7)
+        expect(getTestRoot().querySelectorAll('.error')).to.have.length(7)
       })
     })
 
@@ -125,7 +126,7 @@ describe('form-validation', () => {
       })
 
       it('validates the required fields', () => {
-        expect(document.querySelectorAll('.error')).to.have.length(7)
+        expect(getTestRoot().querySelectorAll('.error')).to.have.length(7)
       })
     })
 
@@ -141,7 +142,7 @@ describe('form-validation', () => {
       })
 
       it('runs the passed-in validators in priority', () => {
-        const error = document.querySelector('.error')
+        const error = getTestRoot().querySelector('.error')
         expect(error.textContent).to.eql('some error')
       })
     })
@@ -158,7 +159,7 @@ describe('form-validation', () => {
       })
 
       it('uses the passed-in resolvers to get the input values', () => {
-        expect(document.querySelector('.error')).to.be(null)
+        expect(getTestRoot().querySelector('.error')).to.be(null)
       })
     })
 
@@ -173,7 +174,7 @@ describe('form-validation', () => {
       })
 
       it('uses the provided methods', () => {
-        expect(document.querySelectorAll('[required].error')).to.have.length(9)
+        expect(getTestRoot().querySelectorAll('.error[required]')).to.have.length(9)
       })
     })
   })

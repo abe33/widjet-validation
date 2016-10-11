@@ -1,6 +1,7 @@
 import expect from 'expect.js'
 import jsdom from 'mocha-jsdom'
 import widgets from 'widjet'
+import {setPageContent, getTestRoot} from 'widjet-test-utils/dom'
 import {clearNodeCache} from 'widjet-utils'
 
 import '../src/index'
@@ -17,7 +18,7 @@ describe('live-validation', () => {
       widgets.release('live-validation')
       widgets.release('form-validation')
 
-      document.body.innerHTML = `
+      setPageContent(`
         <form>
           <input type='text' name='name' required>
 
@@ -44,7 +45,7 @@ describe('live-validation', () => {
             <option value='value4'>Value 4</option>
           </select>
         </form>
-      `
+      `)
     })
 
     const inputs = [
@@ -64,7 +65,7 @@ describe('live-validation', () => {
       inputs.forEach(([selector, changeValue]) => {
         describe(`on ${selector}`, () => {
           beforeEach(() => {
-            input = document.querySelector(selector)
+            input = getTestRoot().querySelector(selector)
           })
 
           it('adds an error message after the node when not validated', () => {
@@ -98,7 +99,7 @@ describe('live-validation', () => {
         })
       })
       it('validates all the fields at init', () => {
-        expect(document.querySelectorAll('.error')).to.have.length(inputs.length)
+        expect(getTestRoot().querySelectorAll('.error')).to.have.length(inputs.length)
       })
     })
 
@@ -112,7 +113,7 @@ describe('live-validation', () => {
       inputs.forEach(([selector, changeValue]) => {
         describe(`on ${selector}`, () => {
           beforeEach(() => {
-            input = document.querySelector(selector)
+            input = getTestRoot().querySelector(selector)
           })
 
           it('validates the input on the specified event', () => {
@@ -136,7 +137,7 @@ describe('live-validation', () => {
         })
       })
       it('passes the error string to the locale method', () => {
-        const error = document.querySelector('.error')
+        const error = getTestRoot().querySelector('.error')
         expect(error.textContent).to.eql('BLANK_VALUE')
       })
     })
@@ -153,7 +154,7 @@ describe('live-validation', () => {
       })
 
       it('runs the passed-in validators in priority', () => {
-        const error = document.querySelector('.error')
+        const error = getTestRoot().querySelector('.error')
         expect(error.textContent).to.eql('some error')
       })
     })
@@ -170,7 +171,7 @@ describe('live-validation', () => {
       })
 
       it('uses the passed-in resolvers to get the input values', () => {
-        expect(document.querySelector('.error')).to.be(null)
+        expect(getTestRoot().querySelector('.error')).to.be(null)
       })
     })
 
@@ -186,7 +187,7 @@ describe('live-validation', () => {
 
       it('uses the provided methods', () => {
         inputs.forEach(([selector, changeValue]) => {
-          input = document.querySelector(selector)
+          input = getTestRoot().querySelector(selector)
 
           expect(input.classList.contains('error')).to.be(true)
 
