@@ -70,6 +70,29 @@ describe('form-validation', () => {
           expect(getTestRoot().querySelectorAll('.error')).to.have.length(7)
         })
       })
+
+      describe('when there is no longer any error', () => {
+        beforeEach(() => {
+          getTestRoot().querySelector('input[type="text"]').value = 'foo'
+          getTestRoot().querySelector('input[type="number"]').value = '1'
+          getTestRoot().querySelector('input[type="checkbox"]').checked = true
+          getTestRoot().querySelector('input[type="radio"]').checked = true
+          getTestRoot().querySelector('textarea').value = 'bar'
+          getTestRoot().querySelector('select').selectedIndex = 1
+          getTestRoot().querySelector('select[multiple] option[value]').selected = true
+
+          form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            return false
+          })
+
+          widgets.dispatch(form, 'submit')
+        })
+
+        it('does not display errors', () => {
+          expect(getTestRoot().querySelectorAll('.error')).to.have.length(0)
+        })
+      })
     })
 
     describe('with no config but live validation', () => {
