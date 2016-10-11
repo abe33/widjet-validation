@@ -53,7 +53,7 @@ describe('live-validation', () => {
       ['input[type="number"]', input => input.value = '0'],
       ['input[type="checkbox"]', input => input.checked = true],
       ['input[type="radio"]', input => input.checked = true],
-      ['select:not([multiple])', input => input.selectedIndex = 1],
+      ['select[name="single"]', input => input.selectedIndex = 1],
       ['select[multiple]', input => input.selectedIndex = 1],
       ['textarea', input => input.value = 'foo']
     ]

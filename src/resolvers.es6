@@ -17,6 +17,7 @@ function optionValues (input) {
 }
 
 function radioValue (form, name) {
-  const checked = form && form.querySelector(`[name="${name}"]:checked`)
+  const checked = form &&
+    asArray(form.querySelectorAll(`[name="${name}"]`)).filter(i => i.checked)[0]
   return checked ? checked.value : undefined
 }
