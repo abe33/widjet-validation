@@ -1,8 +1,9 @@
 import expect from 'expect.js'
 import jsdom from 'mocha-jsdom'
 import widgets from 'widjet'
+import sinon from 'sinon'
 import {setPageContent, getTestRoot} from 'widjet-test-utils/dom'
-import {clearNodeCache} from 'widjet-utils'
+import {identity, clearNodeCache} from 'widjet-utils'
 
 import '../src/index'
 
@@ -143,12 +144,14 @@ describe('live-validation', () => {
     })
 
     describe('with custom validators', () => {
+      let spy
       beforeEach(() => {
+        spy = sinon.spy(i => 'some error')
         widgets('live-validation', '[required]', {
           on: 'init',
           validateOnInit: true,
           validators: [
-            [i => i.nodeName === 'INPUT', i => 'some error']
+            [i => i.nodeName === 'INPUT', spy]
           ]
         })
       })
@@ -156,6 +159,11 @@ describe('live-validation', () => {
       it('runs the passed-in validators in priority', () => {
         const error = getTestRoot().querySelector('.error')
         expect(error.textContent).to.eql('some error')
+      })
+
+      it('calls the validator with the value and the input', () => {
+        const input = getTestRoot().querySelector('input')
+        expect(spy.calledWith(identity, '', input)).to.be.ok()
       })
     })
 

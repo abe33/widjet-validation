@@ -1,6 +1,6 @@
 import widgets from 'widjet'
 import {DisposableEvent, Disposable, CompositeDisposable} from 'widjet-disposables'
-import {when, curry2, compose, identity, asArray, getNode, detachNode} from 'widjet-utils'
+import {when, apply, curry2, compose, identity, asArray, getNode, detachNode, fill, mapEach} from 'widjet-utils'
 
 import DEFAULT_VALIDATORS from './validators'
 import DEFAULT_RESOLVERS from './resolvers'
@@ -60,9 +60,16 @@ export function getValidator (options) {
   const onSuccess = options.onSuccess || identity
   const onError = options.onError || defaultErrorFeedback
   const clean = options.clean || defaultCleanFeedback
-  const validator = when(validators.map(([predicate, validate]) => {
-    return [predicate, compose(curry2(validate)(i18n), when(resolvers))]
-  }))
+  const validator = when(validators.map(([predicate, validate]) =>
+    [
+      predicate,
+      compose(
+        apply(curry2(validate)(i18n)),
+        mapEach([when(resolvers), identity]),
+        fill(2)
+      )
+    ]
+  ))
 
   return input => {
     clean(input)
