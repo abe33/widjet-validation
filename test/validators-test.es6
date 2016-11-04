@@ -1,6 +1,10 @@
 import expect from 'expect.js'
-import {validatePresence, validateChecked, validateEmail} from '../src/validators'
+import jsdom from 'mocha-jsdom'
+import {setPageContent, getTestRoot} from 'widjet-test-utils/dom'
 import {identity} from 'widjet-utils'
+
+import {validatePresence, validateChecked, validateEmail, validateAccept} from '../src/validators'
+import {getFile} from './helpers'
 
 describe('validators', () => {
   describe('validatePresence()', () => {
@@ -50,6 +54,44 @@ describe('validators', () => {
 
     it('validates valid email', () => {
       expect(validateEmail(identity, 'foo@foo.com')).to.be(null)
+    })
+  })
+
+  describe('validateAccept()', () => {
+    jsdom()
+
+    let input
+
+    describe('when the target has a accept attribute', () => {
+      beforeEach(() => {
+        setPageContent('<input type="file" accept="image/*,.pdf,application/x-javascript">')
+        input = getTestRoot().querySelector('input')
+      })
+
+      it('validates files using a mime type glob', () => {
+        expect(validateAccept(identity, [
+          getFile('foo.jpg', 'image/jpeg'),
+          getFile('foo.png', 'image/png')
+        ], input)).to.be(null)
+      })
+
+      it('validates files using a full mime type', () => {
+        expect(validateAccept(identity, [
+          getFile('foo.js', 'application/x-javascript')
+        ], input)).to.be(null)
+      })
+
+      it('validates files using the extension', () => {
+        expect(validateAccept(identity, [
+          getFile('foo.pdf', 'application/pdf')
+        ], input)).to.be(null)
+      })
+
+      it('does not validate a file that do not match the patterns', () => {
+        expect(validateAccept(identity, [
+          getFile('foo.txt', 'text/plain')
+        ], input)).not.to.be(null)
+      })
     })
   })
 })
