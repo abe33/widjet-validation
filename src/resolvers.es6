@@ -5,6 +5,7 @@ export default [
   [inputPredicate('checkbox'), i => i.checked],
   [inputPredicate('number', 'range'), i => i.value && parseFloat(i.value)],
   [inputPredicate('radio'), i => radioValue(parent(i, 'form'), i.name)],
+  [inputPredicate('file'), i => i.files],
   [selectPredicate(true), i => optionValues(i)],
   [selectPredicate(false), i => optionValues(i)[0]],
   [always, i => i.value]

@@ -4,6 +4,7 @@ import widgets from 'widjet'
 import sinon from 'sinon'
 import {setPageContent, getTestRoot} from 'widjet-test-utils/dom'
 import {identity, clearNodeCache} from 'widjet-utils'
+import {getFile, pickFile} from './helpers'
 
 import '../src/index'
 
@@ -24,6 +25,8 @@ describe('live-validation', () => {
           <input type='text' name='name' required>
 
           <input type='number' name='num' required>
+
+          <input type='file' name='file' required>
 
           <input type='checkbox' name='tos' required>
 
@@ -52,6 +55,7 @@ describe('live-validation', () => {
     const inputs = [
       ['input[type="text"]', input => input.value = 'foo'],
       ['input[type="number"]', input => input.value = '0'],
+      ['input[type="file"]', input => pickFile(input, getFile('foo.jpg', 'image/jpeg'))],
       ['input[type="checkbox"]', input => input.checked = true],
       ['input[type="radio"]', input => input.checked = true],
       ['select[name="single"]', input => input.selectedIndex = 1],
