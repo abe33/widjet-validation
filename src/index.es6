@@ -2,10 +2,10 @@ import widgets from 'widjet'
 import {DisposableEvent, Disposable, CompositeDisposable} from 'widjet-disposables'
 import {when, apply, curry2, compose, identity, asArray, getNode, detachNode, fill, mapEach} from 'widjet-utils'
 
-import DEFAULT_VALIDATORS from './validators'
+import DEFAULT_VALIDATORS, {validatePresence, validateChecked, validateEmail, validateAccept} from './validators'
 import DEFAULT_RESOLVERS from './resolvers'
 
-export { DEFAULT_VALIDATORS, DEFAULT_RESOLVERS }
+export { DEFAULT_VALIDATORS, DEFAULT_RESOLVERS, validatePresence, validateChecked, validateEmail, validateAccept }
 
 widgets.define('live-validation', (options) => {
   const validator = getValidator(options)
