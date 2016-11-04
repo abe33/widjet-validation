@@ -3,7 +3,7 @@ import {validatePresence, validateChecked, validateEmail} from '../src/validator
 import {identity} from 'widjet-utils'
 
 describe('validators', () => {
-  describe('.validatePresence()', () => {
+  describe('validatePresence()', () => {
     it('does not validate empty string', () => {
       expect(validatePresence(identity, '')).not.to.be(null)
     })
@@ -26,7 +26,7 @@ describe('validators', () => {
     })
   })
 
-  describe('.validateChecked()', () => {
+  describe('validateChecked()', () => {
     it('does not validate a falsy value', () => {
       expect(validateChecked(identity, 0)).not.to.be(null)
       expect(validateChecked(identity, false)).not.to.be(null)
@@ -38,7 +38,7 @@ describe('validators', () => {
     })
   })
 
-  describe('.validateEmail()', () => {
+  describe('validateEmail()', () => {
     it('does not validate null or undefined value', () => {
       expect(validateEmail(identity, null)).not.to.be(null)
       expect(validateEmail(identity, undefined)).not.to.be(null)
