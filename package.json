@@ -50,7 +50,7 @@
     "jsdom": "^9.8.3",
     "widjet": "^1.0.2",
     "widjet-disposables": "^0.1.7",
-    "widjet-utils": "^0.5.0"
+    "widjet-utils": "^0.6.0"
   },
   "standard": {
     "parser": "babel-eslint",
