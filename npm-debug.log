@@ -1,0 +1,158 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/cedric/.nvm/versions/node/v6.9.1/bin/node',
+1 verbose cli   '/Users/cedric/.nvm/versions/node/v6.9.1/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.8
+3 info using node@v6.9.1
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/cedric/Development/javascripts/widjet-validation',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/cedric/.npm/widjet-validation/1.1.1/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/cedric/.npm correctMkdir not in flight; initializing
+10 info lifecycle widjet-validation@1.1.1~prepublish: widjet-validation@1.1.1
+11 verbose lifecycle widjet-validation@1.1.1~prepublish: unsafe-perm in lifecycle true
+12 verbose lifecycle widjet-validation@1.1.1~prepublish: PATH: /Users/cedric/.nvm/versions/node/v6.9.1/lib/node_modules/npm/bin/node-gyp-bin:/Users/cedric/Development/javascripts/widjet-validation/node_modules/.bin:/Users/cedric/.nvm/versions/node/v6.9.1/bin:/Users/cedric/.rbenv/shims:/usr/local/sbin:/Users/cedric/.rbenv/shims:/usr/local/opt/rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/git/bin:/usr/local/jruby/bin:/Users/cedric/.rbenv/shims:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/jruby/bin:/Users/cedric/bin:/usr/local/Cellar
+13 verbose lifecycle widjet-validation@1.1.1~prepublish: CWD: /Users/cedric/Development/javascripts/widjet-validation
+14 silly lifecycle widjet-validation@1.1.1~prepublish: Args: [ '-c', 'npm run babel' ]
+15 silly lifecycle widjet-validation@1.1.1~prepublish: Returned: code: 0  signal: null
+16 verbose tar pack [ '/Users/cedric/.npm/widjet-validation/1.1.1/package.tgz',
+16 verbose tar pack   '/Users/cedric/Development/javascripts/widjet-validation' ]
+17 verbose tarball /Users/cedric/.npm/widjet-validation/1.1.1/package.tgz
+18 verbose folder /Users/cedric/Development/javascripts/widjet-validation
+19 verbose addLocalTarball adding from inside cache /Users/cedric/.npm/widjet-validation/1.1.1/package.tgz
+20 verbose correctMkdir /Users/cedric/.npm correctMkdir not in flight; initializing
+21 silly cache afterAdd widjet-validation@1.1.1
+22 verbose afterAdd /Users/cedric/.npm/widjet-validation/1.1.1/package/package.json not in flight; writing
+23 verbose correctMkdir /Users/cedric/.npm correctMkdir not in flight; initializing
+24 verbose afterAdd /Users/cedric/.npm/widjet-validation/1.1.1/package/package.json written
+25 silly publish { name: 'widjet-validation',
+25 silly publish   version: '1.1.1',
+25 silly publish   description: 'A validation widget for widjet',
+25 silly publish   main: 'lib/index.js',
+25 silly publish   'jsnext:main': 'src/index.es6',
+25 silly publish   scripts:
+25 silly publish    { test: 'nyc mocha --timeout 5000 --recursive --compilers js:babel-register test/**/*-test.es6',
+25 silly publish      lcov_report: 'nyc report --reporter=lcov',
+25 silly publish      coverage: 'npm run lcov_report && codecov',
+25 silly publish      babel: 'babel src --out-dir lib',
+25 silly publish      standard: 'standard src/*.es6 test/*.es6',
+25 silly publish      esdoc: 'esdoc -c esdoc.json',
+25 silly publish      prepublish: 'npm run babel',
+25 silly publish      start: 'widjet-test-server test/**/*-test.es6' },
+25 silly publish   keywords: [ 'widgets', 'widget', 'web', 'widjet', 'validation' ],
+25 silly publish   repository:
+25 silly publish    { type: 'git',
+25 silly publish      url: 'git://github.com/abe33/widjet-validation.git' },
+25 silly publish   bugs: { url: 'http://github.com/abe33/widjet-validation/issues' },
+25 silly publish   commits: 'http://github.com/abe33/widjet-validation/commits',
+25 silly publish   author: { name: 'Cédric Néhémie', email: 'cedric.nehemie@gmail.com' },
+25 silly publish   license: 'MIT',
+25 silly publish   devDependencies:
+25 silly publish    { 'babel-eslint': '^7.0.0',
+25 silly publish      'babel-register': '^6.3.13',
+25 silly publish      codecov: '^1.0.0',
+25 silly publish      esdoc: '^0.4.0',
+25 silly publish      'expect.js': '^0.3.1',
+25 silly publish      mocha: '^3.0.0',
+25 silly publish      'mocha-jsdom': '^1.1.0',
+25 silly publish      nyc: '^8.3.0',
+25 silly publish      sinon: '^1.17.4',
+25 silly publish      standard: '^5.4.1',
+25 silly publish      'widjet-test-utils': '^1.7.4' },
+25 silly publish   dependencies:
+25 silly publish    { 'babel-cli': '^6.3.17',
+25 silly publish      'babel-plugin-transform-es3-member-expression-literals': '^6.8.0',
+25 silly publish      'babel-plugin-transform-es3-property-literals': '^6.8.0',
+25 silly publish      'babel-preset-es2015': '^6.3.13',
+25 silly publish      jsdom: '^9.8.3',
+25 silly publish      widjet: '^1.0.2',
+25 silly publish      'widjet-disposables': '^0.1.7',
+25 silly publish      'widjet-utils': '^0.6.0' },
+25 silly publish   standard:
+25 silly publish    { parser: 'babel-eslint',
+25 silly publish      globals: [ 'it', 'describe', 'beforeEach', 'afterEach' ] },
+25 silly publish   babel:
+25 silly publish    { presets: [ 'es2015' ],
+25 silly publish      plugins:
+25 silly publish       [ [Object],
+25 silly publish         'transform-es3-member-expression-literals',
+25 silly publish         'transform-es3-property-literals' ],
+25 silly publish      env: { test: [Object] } },
+25 silly publish   nyc:
+25 silly publish    { include: [ 'src/*.es6' ],
+25 silly publish      extension: [ '.es6' ],
+25 silly publish      require: [ 'babel-register' ] },
+25 silly publish   readme: '# widjet-validation [![Build Status](https://travis-ci.org/abe33/widjet-validation.svg?branch=master)](https://travis-ci.org/abe33/widjet-validation) [![codecov](https://codecov.io/gh/abe33/widjet-validation/branch/master/graph/badge.svg)](https://codecov.io/gh/abe33/widjet-validation)\n\nA validation widget for [widjet](http://github.com/abe33/widjet).\n\n## Install\n\n```sh\nnpm install widjet-validation --save\n```\n\n## Usage\n\n```js\nimport widgets from \'widjet\'\nimport \'widjet-validation\'\n\nwidgets(\'live-validation\', \'[required]\', {on: \'load\'})\nwidgets(\'form-validation\', \'form\', {on: \'load\'})\n```\n\nThis package provides two widgets, `live-validation` and `form-validation`.\n\nThe former validates inputs as they change, while the latter ensures that a form cannot be submitted when some of its required field are still invalid.\n\nBoth widgets use the same validation mecanisms, meaning that both widgets can share the same config.\n\n### live-validation\n\nThe `live-validation` widget adds a `validate` method on each target and registers itself by default for the `change` and `blur` events to run the validation.\n\n### form-validation\n\nThe `form-validation` widget adds a `validate` method on each targets and registers itself by default for the `submit` event to run the validation.\n\nThe main difference with `live-validation`, beside the registered events, is that the form validation consists in running the validator on each field matching the `required` selector and to prevent the form submission if any of these fields didn\'t validate.\n\n## Core Principles\n\n### Validation Flow\n\nThe validation flows as follow:\n\n1. When a validation for an input is performed the first step is to clean the already existing feedbacks, if any, the `clean` function is thus called with that input as argument.\n2. The input is then passed to a resolver in order to retrieve its value. Resolvers mecanism is described below.\n3. Once retrieved, the value is passed to a validator. The validator either returns `null` if the value is valid or a `String` with the validation error message.\n4. Depending on the validator result the success or error feedback function will be called for that input.\n\n### Value Resolvers\n\nA resolver is a function that takes an HTML element as argument and returns its value in a JavaScript-friendly type. A resolver is always defined along with a predicate function that also takes an HTML element as argument and returns whether the resolver applies to this element or not.\n\nFor instance, the resolver for inputs of type `checkbox` is defined like this:\n\n```js\nconst checkboxResolver = [\n  i => i.nodeName === \'INPUT\' && i.type === \'checkbox\',\n  i => i.checked\n]\n```\n\nThe fallback resolver is defined like this:\n\n```js\nconst defaultResolver = [i => true, i => i.value]\n```\n\nResolvers are stored in an array and evaluated in order. When a predicate function returns `true` the resolver function is called and the value it returns\nwill be used in the validation.\n\n```js\nconst resolvers = [\n  [\n    i => i.nodeName === \'INPUT\' && i.type === \'checkbox\',\n    i => i.checked\n  ],\n  // other resolvers...\n  [i => true, i => i.value] // catch all resolver\n]\n```\n\n### Value Validators\n\nA validator, like a resolver, combines a predicate function with a validation function. The validation function takes a translation function and a value and should return either `null` if the value is valid or a string with the error message if the value isn\'t valid.\n\nFor instance the presence validation function is defined as follow:\n\n```js\nexport function validatePresence (i18n, value) {\n  return value != null && value.length !== 0 ? null : i18n(\'blank_value\')\n}\n```\n\nIn that context the `i18n` function is for you to provide, by default the passed-in function will be `s => s`.\n\nAlong with a predicate, the typical validator for a mandatory checkbox is:\n\n```js\nconst validateCheckbox = [\n  i => i.nodeName === \'INPUT\' && i.type === \'checkbox\',\n  (i18n, value) => value ? null : i18n(\'unchecked\')\n]\n```\n\nThe default validator being defined with:\n\n```js\nconst defaultValidator = [i => true, validatePresence]\n```\n\nPut together, as for resolvers, validators are stored in an array and the first whose predicate matches will be used to validate the current input:\n\n```js\nconst validators = [\n  [\n    i => i.nodeName === \'INPUT\' && i.type === \'checkbox\',\n    (i18n, value) => value ? null : i18n(\'unchecked\')\n  ],\n  // other validators...\n  [i => true, validatePresence] // catch all validator\n]\n```\n\n### Feedback Functions\n\nThe validation feedback are handled by a group of three functions, one for cleaning the feedback for an input, and two to display success and error in the validation.\n\nBy default, only an error feedback is provided, in the form of a `div` with the class `error` appended after the target input in the DOM. On that principle, the default `clean` implementation will look for a `div.error` after the target input and remove it.\n\n## Configuration\n\n#### Options common to both widgets\n\nOption|Type|Description|\n|---|---|---|\n`clean`|`function(input)`|Given an input to validate, this function will be called to remove any previous validation feedback|\n|`events`|`String`|A space-separated string containing the events that will trigger the validation, i.e `change blur`|\n|`i18n`|`function(string):string`|A function to translate the error messages from the validators|\n|`onError`|`function(input, msg)`|Given an input whose validation failed, this function will be called with the input and the error message to provide the visual feedback|\n|`onSucces`|`function(input)`|Given an input whose validation succeeded, this function will be called with the input to provide the visual feedback|\n|`resolvers`|`Array`|An array of extra resolvers to apply before the provided ones|\n|`validateOnInit`|`Boolean`|If true, a validation of all the target fields will be performed during the initialization of the widget|\n|`validators`|`Array`|An array of extra validators to apply before the provided ones|\n\n#### form-validation Options\n\n|Option|Type|Description|\n|---|---|---|\n|`required`|`String`|A CSS selector to match the field that will be targeted by the form validation, it defaults to `[required]`|\n',
+25 silly publish   readmeFilename: 'README.md',
+25 silly publish   gitHead: '45dbf18cad0a5ce62917fc14557100d2228b4a10',
+25 silly publish   homepage: 'https://github.com/abe33/widjet-validation#readme',
+25 silly publish   _id: 'widjet-validation@1.1.1',
+25 silly publish   _shasum: '2b4e768559b971f161b01b345411507b0f3a932c',
+25 silly publish   _from: '.' }
+26 verbose getPublishConfig undefined
+27 silly mapToRegistry name widjet-validation
+28 silly mapToRegistry using default registry
+29 silly mapToRegistry registry https://registry.npmjs.org/
+30 silly mapToRegistry data Result {
+30 silly mapToRegistry   raw: 'widjet-validation',
+30 silly mapToRegistry   scope: null,
+30 silly mapToRegistry   escapedName: 'widjet-validation',
+30 silly mapToRegistry   name: 'widjet-validation',
+30 silly mapToRegistry   rawSpec: '',
+30 silly mapToRegistry   spec: 'latest',
+30 silly mapToRegistry   type: 'tag' }
+31 silly mapToRegistry uri https://registry.npmjs.org/widjet-validation
+32 verbose publish registryBase https://registry.npmjs.org/
+33 silly publish uploading /Users/cedric/.npm/widjet-validation/1.1.1/package.tgz
+34 verbose request uri https://registry.npmjs.org/widjet-validation
+35 verbose request sending authorization for write operation
+36 info attempt registry request try #1 at 3:45:35 PM
+37 verbose request using bearer token for auth
+38 verbose request id 13f3493cb7303441
+39 http request PUT https://registry.npmjs.org/widjet-validation
+40 http 403 https://registry.npmjs.org/widjet-validation
+41 verbose headers { 'content-type': 'application/json',
+41 verbose headers   'cache-control': 'max-age=300',
+41 verbose headers   'content-length': '95',
+41 verbose headers   'accept-ranges': 'bytes',
+41 verbose headers   date: 'Tue, 15 Nov 2016 14:45:37 GMT',
+41 verbose headers   via: '1.1 varnish',
+41 verbose headers   connection: 'keep-alive',
+41 verbose headers   'x-served-by': 'cache-lcy1148-LCY',
+41 verbose headers   'x-cache': 'MISS',
+41 verbose headers   'x-cache-hits': '0',
+41 verbose headers   'x-timer': 'S1479221135.813682,VS0,VE1871',
+41 verbose headers   vary: 'Accept-Encoding' }
+42 verbose request invalidating /Users/cedric/.npm/registry.npmjs.org/widjet-validation on PUT
+43 error publish Failed PUT 403
+44 verbose stack Error: "You cannot publish over the previously published version 1.1.1." : widjet-validation
+44 verbose stack     at makeError (/Users/cedric/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+44 verbose stack     at CachingRegistryClient.<anonymous> (/Users/cedric/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+44 verbose stack     at Request._callback (/Users/cedric/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+44 verbose stack     at Request.self.callback (/Users/cedric/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/request/request.js:187:22)
+44 verbose stack     at emitTwo (events.js:106:13)
+44 verbose stack     at Request.emit (events.js:191:7)
+44 verbose stack     at Request.<anonymous> (/Users/cedric/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/request/request.js:1044:10)
+44 verbose stack     at emitOne (events.js:96:13)
+44 verbose stack     at Request.emit (events.js:188:7)
+44 verbose stack     at IncomingMessage.<anonymous> (/Users/cedric/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/request/request.js:965:12)
+45 verbose statusCode 403
+46 verbose pkgid widjet-validation
+47 verbose cwd /Users/cedric/Development/javascripts/widjet-validation
+48 error Darwin 16.1.0
+49 error argv "/Users/cedric/.nvm/versions/node/v6.9.1/bin/node" "/Users/cedric/.nvm/versions/node/v6.9.1/bin/npm" "publish"
+50 error node v6.9.1
+51 error npm  v3.10.8
+52 error code E403
+53 error "You cannot publish over the previously published version 1.1.1." : widjet-validation
+54 error If you need help, you may report this error at:
+54 error     <https://github.com/npm/npm/issues>
+55 verbose exit [ 1, true ]
