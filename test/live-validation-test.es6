@@ -1,24 +1,24 @@
-import expect from 'expect.js'
-import jsdom from 'mocha-jsdom'
-import widgets from 'widjet'
-import sinon from 'sinon'
-import {setPageContent, getTestRoot} from 'widjet-test-utils/dom'
-import {identity, clearNodeCache} from 'widjet-utils'
-import {getFile, pickFile} from './helpers'
+import expect from 'expect.js';
+import jsdom from 'mocha-jsdom';
+import widgets from 'widjet';
+import sinon from 'sinon';
+import {setPageContent, getTestRoot} from 'widjet-test-utils/dom';
+import {identity, clearNodeCache} from 'widjet-utils';
+import {getFile, pickFile} from './helpers';
 
-import '../src/index'
+import '../src/index';
 
 describe('live-validation', () => {
-  let input
+  let input;
 
-  jsdom()
+  jsdom({url: 'http://localhost'});
 
   describe('with a form with required fields', () => {
     beforeEach(() => {
-      clearNodeCache()
+      clearNodeCache();
 
-      widgets.release('live-validation')
-      widgets.release('form-validation')
+      widgets.release('live-validation');
+      widgets.release('form-validation');
 
       setPageContent(`
         <form>
@@ -49,8 +49,8 @@ describe('live-validation', () => {
             <option value='value4'>Value 4</option>
           </select>
         </form>
-      `)
-    })
+      `);
+    });
 
     const inputs = [
       ['input[type="text"]', input => input.value = 'foo'],
@@ -60,116 +60,116 @@ describe('live-validation', () => {
       ['input[type="radio"]', input => input.checked = true],
       ['select[name="single"]', input => input.selectedIndex = 1],
       ['select[multiple]', input => input.selectedIndex = 1],
-      ['textarea', input => input.value = 'foo']
-    ]
+      ['textarea', input => input.value = 'foo'],
+    ];
 
     describe('with no config at all', () => {
       beforeEach(() => {
-        widgets('live-validation', '[required]', {on: 'init'})
-      })
+        widgets('live-validation', '[required]', {on: 'init'});
+      });
       inputs.forEach(([selector, changeValue]) => {
         describe(`on ${selector}`, () => {
           beforeEach(() => {
-            input = getTestRoot().querySelector(selector)
-          })
+            input = getTestRoot().querySelector(selector);
+          });
 
           it('adds an error message after the node when not validated', () => {
-            widgets.dispatch(input, 'change')
+            widgets.dispatch(input, 'change');
 
-            const next = input.nextElementSibling
+            const next = input.nextElementSibling;
 
-            expect(next).not.to.be(null)
-            expect(next != null && next.classList.contains('error')).to.be(true)
-          })
+            expect(next).not.to.be(null);
+            expect(next != null && next.classList.contains('error')).to.be(true);
+          });
 
           it('removes the error once it validates', () => {
-            widgets.dispatch(input, 'change')
+            widgets.dispatch(input, 'change');
 
-            changeValue(input)
-            widgets.dispatch(input, 'change')
+            changeValue(input);
+            widgets.dispatch(input, 'change');
 
-            const next = input.nextElementSibling
+            const next = input.nextElementSibling;
 
-            expect(next != null && next.classList.contains('error')).to.be(false)
-          })
-        })
-      })
-    })
+            expect(next != null && next.classList.contains('error')).to.be(false);
+          });
+        });
+      });
+    });
 
     describe('with the validateOnInit param enabled', () => {
       beforeEach(() => {
         widgets('live-validation', '[required]', {
           on: 'init',
-          validateOnInit: true
-        })
-      })
+          validateOnInit: true,
+        });
+      });
       it('validates all the fields at init', () => {
-        expect(getTestRoot().querySelectorAll('.error')).to.have.length(inputs.length)
-      })
-    })
+        expect(getTestRoot().querySelectorAll('.error')).to.have.length(inputs.length);
+      });
+    });
 
     describe('with the events param defined', () => {
       beforeEach(() => {
         widgets('live-validation', '[required]', {
           on: 'init',
-          events: 'foo'
-        })
-      })
+          events: 'foo',
+        });
+      });
       inputs.forEach(([selector, changeValue]) => {
         describe(`on ${selector}`, () => {
           beforeEach(() => {
-            input = getTestRoot().querySelector(selector)
-          })
+            input = getTestRoot().querySelector(selector);
+          });
 
           it('validates the input on the specified event', () => {
-            widgets.dispatch(input, 'foo')
+            widgets.dispatch(input, 'foo');
 
-            const next = input.nextElementSibling
+            const next = input.nextElementSibling;
 
-            expect(next).not.to.be(null)
-            expect(next != null && next.classList.contains('error')).to.be(true)
-          })
-        })
-      })
-    })
+            expect(next).not.to.be(null);
+            expect(next != null && next.classList.contains('error')).to.be(true);
+          });
+        });
+      });
+    });
 
     describe('with a locale function provided', () => {
       beforeEach(() => {
         widgets('live-validation', '[required]', {
           on: 'init',
           validateOnInit: true,
-          i18n: k => k.toUpperCase()
-        })
-      })
+          i18n: k => k.toUpperCase(),
+        });
+      });
       it('passes the error string to the locale method', () => {
-        const error = getTestRoot().querySelector('.error')
-        expect(error.textContent).to.eql('BLANK_VALUE')
-      })
-    })
+        const error = getTestRoot().querySelector('.error');
+        expect(error.textContent).to.eql('BLANK_VALUE');
+      });
+    });
 
     describe('with custom validators', () => {
-      let spy
+      let spy;
       beforeEach(() => {
-        spy = sinon.spy(i => 'some error')
+        spy = sinon.spy(i => 'some error');
         widgets('live-validation', '[required]', {
           on: 'init',
           validateOnInit: true,
           validators: [
-            [i => i.nodeName === 'INPUT', spy]
-          ]
-        })
-      })
+            [i => i.nodeName === 'INPUT', spy],
+          ],
+        });
+      });
 
       it('runs the passed-in validators in priority', () => {
-        const error = getTestRoot().querySelector('.error')
-        expect(error.textContent).to.eql('some error')
-      })
+        const error = getTestRoot().querySelector('.error');
+        expect(error.textContent).to.eql('some error');
+      });
 
       it('calls the validator with the value and the input', () => {
-        const input = getTestRoot().querySelector('input')
-        expect(spy.calledWith(identity, '', input)).to.be.ok()
-      })
-    })
+        const input = getTestRoot().querySelector('input');
+        expect(spy.calledWith(identity, '', input)).to.be.ok();
+      });
+    });
 
     describe('with custom resolvers', () => {
       beforeEach(() => {
@@ -177,15 +177,15 @@ describe('live-validation', () => {
           on: 'init',
           validateOnInit: true,
           resolvers: [
-            [i => true, i => 'some value']
-          ]
-        })
-      })
+            [i => true, i => 'some value'],
+          ],
+        });
+      });
 
       it('uses the passed-in resolvers to get the input values', () => {
-        expect(getTestRoot().querySelector('.error')).to.be(null)
-      })
-    })
+        expect(getTestRoot().querySelector('.error')).to.be(null);
+      });
+    });
 
     describe('with custom feedback methods', () => {
       beforeEach(() => {
@@ -193,22 +193,22 @@ describe('live-validation', () => {
           on: 'init',
           validateOnInit: true,
           clean: i => i.classList.remove('error'),
-          onError: i => i.classList.add('error')
-        })
-      })
+          onError: i => i.classList.add('error'),
+        });
+      });
 
       it('uses the provided methods', () => {
         inputs.forEach(([selector, changeValue]) => {
-          input = getTestRoot().querySelector(selector)
+          input = getTestRoot().querySelector(selector);
 
-          expect(input.classList.contains('error')).to.be(true)
+          expect(input.classList.contains('error')).to.be(true);
 
-          changeValue(input)
-          widgets.dispatch(input, 'change')
+          changeValue(input);
+          widgets.dispatch(input, 'change');
 
-          expect(input.classList.contains('error')).to.be(false)
-        })
-      })
-    })
-  })
-})
+          expect(input.classList.contains('error')).to.be(false);
+        });
+      });
+    });
+  });
+});
