@@ -79,7 +79,7 @@ describe('form-validation', () => {
           getTestRoot().querySelector('input[type="radio"]').checked = true;
           getTestRoot().querySelector('textarea').value = 'bar';
           getTestRoot().querySelector('select').selectedIndex = 1;
-          getTestRoot().querySelector('select[multiple] option[value]').selected = true;
+          getTestRoot().querySelectorAll('select[multiple] option')[1].selected = true;
 
           form.addEventListener('submit', (e) => {
             e.preventDefault();
