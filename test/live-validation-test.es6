@@ -143,7 +143,7 @@ describe('live-validation', () => {
       });
       it('passes the error string to the locale method', () => {
         const error = getTestRoot().querySelector('.error');
-        expect(error.textContent).to.eql('BLANK_VALUE');
+        expect(error.textContent).to.eql('value_missing');
       });
     });
 
@@ -178,6 +178,9 @@ describe('live-validation', () => {
           validateOnInit: true,
           resolvers: [
             [i => true, i => 'some value'],
+          ],
+          validators: [
+            [i => true, (i18n, v) => v === 'some value' ? null : 'error'],
           ],
         });
       });

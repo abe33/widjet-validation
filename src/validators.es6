@@ -1,4 +1,3 @@
-import {inputPredicate, attributePredicate} from './utils';
 import {always, when} from 'widjet-utils';
 
 export function nativeValidation(i18n, value, input) {
@@ -27,7 +26,7 @@ function labelForValidity(input) {
 }
 
 export function validatePresence(i18n, value) {
-  return value != null && value.length !== 0 ? null : i18n('blank_value');
+  return value != null && value.length !== 0 ? null : i18n('value_missing');
 }
 
 export function validateChecked(i18n, value) {
@@ -66,8 +65,5 @@ export function validateAccept(i18n, value, input) {
 }
 
 export default [
-  [inputPredicate('email'), validateEmail],
-  [inputPredicate('checkbox'), validateChecked],
-  [attributePredicate('required'), validatePresence],
   [always, nativeValidation],
 ];

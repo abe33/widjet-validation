@@ -178,6 +178,9 @@ describe('form-validation', () => {
           resolvers: [
             [i => true, i => 'some value'],
           ],
+          validators: [
+            [i => true, (i18n, v) => v === 'some value' ? null : 'error'],
+          ],
         });
       });
 
