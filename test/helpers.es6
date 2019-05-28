@@ -9,6 +9,12 @@ export function pickFile(input, file) {
     get: () => [file],
     configurable: true,
   });
+
+  Object.defineProperty(input, 'checkValidity', {
+    value() { return true; },
+    configurable: true,
+  });
+
   change(input);
 }
 
