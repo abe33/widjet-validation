@@ -114,7 +114,7 @@ describe('form-validation', () => {
       beforeEach(() => {
         widgets('form-validation', 'form', {
           on: 'init',
-          required: 'input',
+          fieldSelector: 'input',
         });
 
         widgets.dispatch(form, 'submit');

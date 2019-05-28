@@ -24,7 +24,7 @@ widgets.define('live-validation', (options) => {
 });
 
 widgets.define('form-validation', (options) => {
-  const required = options.required || '[required]';
+  const fieldSelector = options.fieldSelector || 'input, select, textarea';
   const events = options.events || 'submit';
   const validator = getValidator(options);
   const reducer = (memo, item) =>
@@ -32,7 +32,7 @@ widgets.define('form-validation', (options) => {
 
   return (form) => {
     form.validate = () =>
-      asArray(form.querySelectorAll(required)).reduce(reducer, false);
+      asArray(form.querySelectorAll(fieldSelector)).reduce(reducer, false);
 
     if (options.validateOnInit) { form.validate(); }
 
