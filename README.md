@@ -32,7 +32,7 @@ The `live-validation` widget adds a `validate` method on each target and registe
 
 The `form-validation` widget adds a `validate` method on each targets and registers itself by default for the `submit` event to run the validation.
 
-The main difference with `live-validation`, beside the registered events, is that the form validation consists in running the validator on each field matching the `required` selector and to prevent the form submission if any of these fields didn't validate.
+The main difference with `live-validation`, beside the registered events, is that the form validation consists in running the validator on each field matching the `fieldSelector` selector and to prevent the form submission if any of these fields didn't validate.
 
 ## Core Principles
 
@@ -42,7 +42,7 @@ The validation flows as follow:
 
 1. When a validation for an input is performed the first step is to clean the already existing feedbacks, if any, the `clean` function is thus called with that input as argument.
 2. The input is then passed to a resolver in order to retrieve its value. Resolvers mecanism is described below.
-3. Once retrieved, the value is passed to a validator. The validator either returns `null` if the value is valid or a `String` with the validation error message.
+3. Once retrieved, the value is passed to a validator. The validator either returns `null` if the value is valid or a `String` with the validation error message. Custom validators are executed first and the process finishes using the native validation provided by the `checkValidity()` method.
 4. Depending on the validator result the success or error feedback function will be called for that input.
 
 ### Value Resolvers
@@ -86,7 +86,7 @@ For instance the presence validation function is defined as follow:
 
 ```js
 export function validatePresence(i18n, value) {
-  return value != null && value.length !== 0 ? null : i18n('blank_value');
+  return value != null && value.length !== 0 ? null : i18n('value_missing');
 }
 ```
 
@@ -104,7 +104,7 @@ const validateCheckbox = [
 The default validator being defined with:
 
 ```js
-const defaultValidator = [i => true, validatePresence];
+const defaultValidator = [i => true, nativeValidation];
 ```
 
 Put together, as for resolvers, validators are stored in an array and the first whose predicate matches will be used to validate the current input:
@@ -116,13 +116,13 @@ const validators = [
     (i18n, value) => value ? null : i18n('unchecked'),
   ],
   // other validators...
-  [i => true, validatePresence], // catch all validator
+  [i => true, nativeValidation], // catch all validator
 ];
 ```
 
 ### Native Validation Support
 
-The default validators includes a general validator that relies on `checlValidity` and `ValidityState` from the browser APIs.
+The default validators includes a general validator that relies on `checkValidity` and `ValidityState` from the browser APIs.
 
 ### Feedback Functions
 
@@ -149,4 +149,4 @@ Option|Type|Description|
 
 |Option|Type|Description|
 |---|---|---|
-|`required`|`String`|A CSS selector to match the field that will be targeted by the form validation, it defaults to `[required]`|
+|`fieldSelector`|`String`|A CSS selector to match the field that will be targeted by the form validation, it defaults to `input, select, textarea`|
