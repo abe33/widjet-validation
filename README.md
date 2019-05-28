@@ -11,11 +11,11 @@ npm install widjet-validation --save
 ## Usage
 
 ```js
-import widgets from 'widjet'
-import 'widjet-validation'
+import widgets from 'widjet';
+import 'widjet-validation';
 
-widgets('live-validation', '[required]', {on: 'load'})
-widgets('form-validation', 'form', {on: 'load'})
+widgets('live-validation', '[required]', {on: 'load'});
+widgets('form-validation', 'form', {on: 'load'});
 ```
 
 This package provides two widgets, `live-validation` and `form-validation`.
@@ -54,14 +54,14 @@ For instance, the resolver for inputs of type `checkbox` is defined like this:
 ```js
 const checkboxResolver = [
   i => i.nodeName === 'INPUT' && i.type === 'checkbox',
-  i => i.checked
-]
+  i => i.checked,
+];
 ```
 
 The fallback resolver is defined like this:
 
 ```js
-const defaultResolver = [i => true, i => i.value]
+const defaultResolver = [i => true, i => i.value];
 ```
 
 Resolvers are stored in an array and evaluated in order. When a predicate function returns `true` the resolver function is called and the value it returns
@@ -71,11 +71,11 @@ will be used in the validation.
 const resolvers = [
   [
     i => i.nodeName === 'INPUT' && i.type === 'checkbox',
-    i => i.checked
+    i => i.checked,
   ],
   // other resolvers...
-  [i => true, i => i.value] // catch all resolver
-]
+  [i => true, i => i.value], // catch all resolver
+];
 ```
 
 ### Value Validators
@@ -85,8 +85,8 @@ A validator, like a resolver, combines a predicate function with a validation fu
 For instance the presence validation function is defined as follow:
 
 ```js
-export function validatePresence (i18n, value) {
-  return value != null && value.length !== 0 ? null : i18n('blank_value')
+export function validatePresence(i18n, value) {
+  return value != null && value.length !== 0 ? null : i18n('blank_value');
 }
 ```
 
@@ -97,14 +97,14 @@ Along with a predicate, the typical validator for a mandatory checkbox is:
 ```js
 const validateCheckbox = [
   i => i.nodeName === 'INPUT' && i.type === 'checkbox',
-  (i18n, value) => value ? null : i18n('unchecked')
-]
+  (i18n, value) => value ? null : i18n('unchecked'),
+];
 ```
 
 The default validator being defined with:
 
 ```js
-const defaultValidator = [i => true, validatePresence]
+const defaultValidator = [i => true, validatePresence];
 ```
 
 Put together, as for resolvers, validators are stored in an array and the first whose predicate matches will be used to validate the current input:
@@ -113,11 +113,11 @@ Put together, as for resolvers, validators are stored in an array and the first 
 const validators = [
   [
     i => i.nodeName === 'INPUT' && i.type === 'checkbox',
-    (i18n, value) => value ? null : i18n('unchecked')
+    (i18n, value) => value ? null : i18n('unchecked'),
   ],
   // other validators...
-  [i => true, validatePresence] // catch all validator
-]
+  [i => true, validatePresence], // catch all validator
+];
 ```
 
 ### Feedback Functions
