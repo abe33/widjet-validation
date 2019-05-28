@@ -120,6 +120,10 @@ const validators = [
 ];
 ```
 
+### Native Validation Support
+
+The default validators includes a general validator that relies on `checlValidity` and `ValidityState` from the browser APIs.
+
 ### Feedback Functions
 
 The validation feedback are handled by a group of three functions, one for cleaning the feedback for an input, and two to display success and error in the validation.

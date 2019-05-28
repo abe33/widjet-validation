@@ -1,5 +1,30 @@
-import {inputPredicate} from './utils';
+import {inputPredicate, requiredPredicate} from './utils';
 import {always, when} from 'widjet-utils';
+
+export function nativeValidation(i18n, value, input) {
+  return input.checkValidity() ? null : labelForValidity(input);
+}
+
+const MESSAGES = {
+  badInput: 'bad_input',
+  customError: 'custom_error',
+  patternMismatch: 'pattern_mismatch',
+  rangeOverflow: 'range_overflow',
+  rangeUnderflow: 'range_underflow',
+  stepMismatch: 'step_mismatch',
+  tooLong: 'too_long',
+  tooShort: 'too_short',
+  typeMismatch: 'type_mismatch',
+  valueMissing: 'value_missing',
+};
+
+function labelForValidity(input) {
+  return Object.keys(MESSAGES).reduce((memo, key) => {
+    if (memo) { return memo; }
+    if (input.validity[key]) { return MESSAGES[key]; }
+    return null;
+  }, null);
+}
 
 export function validatePresence(i18n, value) {
   return value != null && value.length !== 0 ? null : i18n('blank_value');
@@ -43,5 +68,6 @@ export function validateAccept(i18n, value, input) {
 export default [
   [inputPredicate('email'), validateEmail],
   [inputPredicate('checkbox'), validateChecked],
-  [always, validatePresence],
+  [requiredPredicate, validatePresence],
+  [always, nativeValidation],
 ];

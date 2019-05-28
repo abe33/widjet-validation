@@ -5,3 +5,7 @@ export function inputPredicate(...types) {
 export function selectPredicate(multiple) {
   return input => input.nodeName === 'SELECT' && input.multiple === multiple;
 }
+
+export function requiredPredicate(input) {
+  return input.hasAttribute('required');
+}

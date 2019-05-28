@@ -65,7 +65,7 @@ describe('live-validation', () => {
 
     describe('with no config at all', () => {
       beforeEach(() => {
-        widgets('live-validation', '[required]', {on: 'init'});
+        widgets('live-validation', 'input, select, textarea', {on: 'init'});
       });
       inputs.forEach(([selector, changeValue]) => {
         describe(`on ${selector}`, () => {
@@ -207,6 +207,59 @@ describe('live-validation', () => {
           widgets.dispatch(input, 'change');
 
           expect(input.classList.contains('error')).to.be(false);
+        });
+      });
+    });
+  });
+
+  describe('with a form with no required fields', () => {
+    beforeEach(() => {
+      clearNodeCache();
+
+      widgets.release('live-validation');
+      widgets.release('form-validation');
+
+      setPageContent(`
+        <form>
+          <input type='number' name='num' value='12' min='0' max='10'>
+        </form>
+      `);
+    });
+
+    const inputs = [
+      ['input[type="number"]', input => input.value = '0'],
+    ];
+
+    describe('with no config at all', () => {
+      beforeEach(() => {
+        widgets('live-validation', 'input, select, textarea', {on: 'init'});
+      });
+
+      inputs.forEach(([selector, changeValue]) => {
+        describe(`on ${selector}`, () => {
+          beforeEach(() => {
+            input = getTestRoot().querySelector(selector);
+          });
+
+          it('adds an error message after the native validation failed', () => {
+            widgets.dispatch(input, 'change');
+
+            const next = input.nextElementSibling;
+
+            expect(next).not.to.be(null);
+            expect(next != null && next.classList.contains('error')).to.be(true);
+          });
+
+          it('removes the error once it validates', () => {
+            widgets.dispatch(input, 'change');
+
+            changeValue(input);
+            widgets.dispatch(input, 'change');
+
+            const next = input.nextElementSibling;
+
+            expect(next != null && next.classList.contains('error')).to.be(false);
+          });
         });
       });
     });
