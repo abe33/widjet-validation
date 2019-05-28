@@ -6,6 +6,6 @@ export function selectPredicate(multiple) {
   return input => input.nodeName === 'SELECT' && input.multiple === multiple;
 }
 
-export function requiredPredicate(input) {
-  return input.hasAttribute('required');
+export function attributePredicate(attr) {
+  return (input) => input.hasAttribute(attr);
 }
