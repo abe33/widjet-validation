@@ -1,6 +1,6 @@
 {
   "name": "widjet-validation",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "A validation widget for widjet",
   "main": "lib/index.js",
   "jsnext:main": "src/index.es6",
@@ -53,9 +53,12 @@
     "mocha-jsdom": "^2.0.0",
     "nyc": "^14.1.1",
     "sinon": "^1.17.4",
+    "widjet": "^1.1.0",
+    "widjet-disposables": "^1.0.0",
+    "widjet-utils": "^1.1.0",
     "widjet-test-utils": "^1.9.1"
   },
-  "dependencies": {
+  "peerDependencies": {
     "widjet": "^1.1.0",
     "widjet-disposables": "^1.0.0",
     "widjet-utils": "^1.1.0"
