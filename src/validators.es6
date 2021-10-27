@@ -13,14 +13,17 @@ const MESSAGES = {
   stepMismatch: 'step_mismatch',
   tooLong: 'too_long',
   tooShort: 'too_short',
-  typeMismatch: 'type_mismatch',
+  email_typeMismatch: 'email_mismatch',
+  url_typeMismatch: 'url_mismatch',
   valueMissing: 'value_missing',
 };
 
 function labelForValidity(input) {
   return Object.keys(MESSAGES).reduce((memo, key) => {
     if (memo) { return memo; }
-    if (input.validity[key]) { return MESSAGES[key]; }
+    if (input.validity[key]) {
+      return MESSAGES[`${input.type}_${key}`] || MESSAGES[key];
+    }
     return null;
   }, null);
 }
