@@ -10,6 +10,7 @@ export { DEFAULT_VALIDATORS, DEFAULT_RESOLVERS, validatePresence, validateChecke
 widgets.define('live-validation', (options) => {
   const validator = getValidator(options);
   const events = options.events || 'change blur';
+  const inputBuffer = options.inputBuffer || 0;
 
   return (input) => {
     input.validate = () => validator(input);
@@ -17,7 +18,7 @@ widgets.define('live-validation', (options) => {
     if (options.validateOnInit) { input.validate(); }
 
     return new CompositeDisposable([
-      new DisposableEvent(input, events, () => input.validate()),
+      new DisposableEvent(input, events, withInputBuffer(inputBuffer, () => input.validate())),
       new Disposable(() => delete input.validate),
     ]);
   };
@@ -91,4 +92,14 @@ function defaultErrorFeedback(input, res) {
 function defaultCleanFeedback(input) {
   const next = input.nextElementSibling;
   if (next && next.classList.contains('error')) { detachNode(next); }
+}
+
+function withInputBuffer(buffer, callback) {
+  let timeout;
+  return buffer <= 0
+    ? callback
+    : () => {
+      clearTimeout(timeout);
+      setTimeout(callback, buffer);
+    };
 }

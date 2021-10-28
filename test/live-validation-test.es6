@@ -213,6 +213,59 @@ describe('live-validation', () => {
         });
       });
     });
+
+    describe('with an input buffer option', () => {
+      let clock;
+
+      beforeEach(() => {
+        widgets('live-validation', 'input, select, textarea', {
+          on: 'init',
+          inputBuffer: 100,
+        });
+        clock = sinon.useFakeTimers();
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      inputs.forEach(([selector, changeValue]) => {
+        describe(`on ${selector}`, () => {
+          beforeEach(() => {
+            input = getTestRoot().querySelector(selector);
+          });
+
+          it('adds an error message only after the delay has been elapsed', () => {
+            widgets.dispatch(input, 'change');
+
+            let next = input.nextElementSibling;
+
+            expect(next == null || !next.classList.contains('error')).to.be(true);
+
+            clock.tick(110);
+
+            next = input.nextElementSibling;
+
+            expect(next).not.to.be(null);
+
+            expect(next != null && next.classList.contains('error')).to.be(true);
+          });
+
+          it('removes the error once it validates', () => {
+            widgets.dispatch(input, 'change');
+            clock.tick(110);
+
+            changeValue(input);
+            widgets.dispatch(input, 'change');
+            clock.tick(110);
+
+            const next = input.nextElementSibling;
+
+            expect(next != null && next.classList.contains('error')).to.be(false);
+          });
+        });
+      });
+    });
   });
 
   describe('with a form with no required fields', () => {
