@@ -100,6 +100,6 @@ function withInputBuffer(buffer, callback) {
     ? callback
     : () => {
       clearTimeout(timeout);
-      setTimeout(callback, buffer);
+      timeout = setTimeout(callback, buffer);
     };
 }
