@@ -81,6 +81,34 @@ describe('form-validation', () => {
         });
       });
 
+      describe('on validate call', () => {
+        beforeEach(() => {
+          form.validate();
+        });
+
+        it('validates the required fields', () => {
+          expect(getTestRoot().querySelectorAll('.error')).to.have.length(7);
+        });
+
+        it('emits a did-not-validate event', () => {
+          expect(didNotValidateSpy.called).to.be(true);
+        });
+      });
+
+      describe('on silent validate call', () => {
+        beforeEach(() => {
+          form.validate(true);
+        });
+
+        it('does not display any errors', () => {
+          expect(getTestRoot().querySelectorAll('.error')).to.have.length(0);
+        });
+
+        it('still emits a did-not-validate event', () => {
+          expect(didNotValidateSpy.called).to.be(true);
+        });
+      });
+
       describe('when there is no longer any error', () => {
         beforeEach(() => {
           getTestRoot().querySelector('input[type="text"]').value = 'foo';

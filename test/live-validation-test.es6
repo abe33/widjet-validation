@@ -9,7 +9,7 @@ import {getFile, pickFile} from './helpers';
 import '../src/index';
 
 describe('live-validation', () => {
-  let input;
+  let form, input;
 
   jsdom({url: 'http://localhost'});
 
@@ -50,6 +50,9 @@ describe('live-validation', () => {
           </select>
         </form>
       `);
+
+      form = getTestRoot().querySelector('form');
+      form.validateExcept = sinon.spy();
     });
 
     const inputs = [
@@ -91,6 +94,14 @@ describe('live-validation', () => {
             const next = input.nextElementSibling;
 
             expect(next != null && next.classList.contains('error')).to.be(false);
+          });
+
+          it('calls the form silent validation', () => {
+            widgets.dispatch(input, 'change');
+
+            expect(form.validateExcept.called).to.be(true);
+            expect(form.validateExcept.getCall(0).args[0]).to.be(input);
+            expect(form.validateExcept.getCall(0).args[1]).to.be(true);
           });
         });
       });
