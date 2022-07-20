@@ -32,8 +32,14 @@ widgets.define('form-validation', (options) => {
     (item.validate ? item.validate() : validator(item)) || memo;
 
   return (form) => {
-    form.validate = () =>
-      asArray(form.querySelectorAll(fieldSelector)).reduce(reducer, false);
+    form.validate = () => {
+      const result = asArray(form.querySelectorAll(fieldSelector)).reduce(reducer, false);
+      if (result) {
+        widgets.dispatch(form, 'did-not-validate', result);
+      } else {
+        widgets.dispatch(form, 'did-validate', result);
+      }
+    };
 
     if (options.validateOnInit) { form.validate(); }
 

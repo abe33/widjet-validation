@@ -8,7 +8,7 @@ import {clearNodeCache} from 'widjet-utils';
 import '../src/index';
 
 describe('form-validation', () => {
-  let form, input;
+  let form, input, didValidateSpy, didNotValidateSpy;
 
   jsdom({url: 'http://localhost'});
 
@@ -48,8 +48,14 @@ describe('form-validation', () => {
         </form>
       `);
 
+      didValidateSpy = sinon.spy();
+      didNotValidateSpy = sinon.spy();
+
       form = getTestRoot().querySelector('form');
       input = getTestRoot().querySelector('input');
+
+      form.addEventListener('did-validate', didValidateSpy);
+      form.addEventListener('did-not-validate', didNotValidateSpy);
     });
 
     describe('with no config and no live validation', () => {
@@ -68,6 +74,10 @@ describe('form-validation', () => {
 
         it('validates the required fields', () => {
           expect(getTestRoot().querySelectorAll('.error')).to.have.length(7);
+        });
+
+        it('emits a did-not-validate event', () => {
+          expect(didNotValidateSpy.called).to.be(true);
         });
       });
 
@@ -91,6 +101,10 @@ describe('form-validation', () => {
 
         it('does not display errors', () => {
           expect(getTestRoot().querySelectorAll('.error')).to.have.length(0);
+        });
+
+        it('emits a did-validate event', () => {
+          expect(didValidateSpy.called).to.be(true);
         });
       });
     });
