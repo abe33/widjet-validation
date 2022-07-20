@@ -130,6 +130,10 @@ The validation feedback are handled by a group of three functions, one for clean
 
 By default, only an error feedback is provided, in the form of a `div` with the class `error` appended after the target input in the DOM. On that principle, the default `clean` implementation will look for a `div.error` after the target input and remove it.
 
+### Events
+
+Depending on whether the form validation succeeded or not a `did-validate` and `did-not-validate` event will be dispatched from the form.
+
 ## Configuration
 
 #### Options common to both widgets
