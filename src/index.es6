@@ -27,7 +27,10 @@ widgets.define('live-validation', (options) => {
   return (input) => {
     input.validateSelfAndForm = (silent) => {
       const result = input.validate(silent);
-      parent(input, 'form').validateExcept(input, true);
+      const form = parent(input, 'form');
+      if (form) {
+        form.validateExcept(input, true);
+      }
       return result;
     };
 
